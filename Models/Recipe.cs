@@ -2,6 +2,7 @@ namespace food_history_api.Models;
 
 public class Recipe {
     public int? Id {get; set;}
+    
     public string Name {get; set;}
 
     public List<string> CourseTypes {get; set;}
@@ -12,13 +13,13 @@ public class Recipe {
 
     public string ServingName {get; set;}
 
-    public string? RecipeSourceUrl {get; set;}
+    public Uri? RecipeSourceUrl {get; set;}
 
     public List<Ingredient>? Ingredients {get; set;}
 
     public List<string>? Instructions {get; set;}
 
-    public Recipe(int id, string name, List<String> courseTypes, List<String> cuisineTypes, int servingAmount, string servingName, string? recipeSourceUrl) {
+    public Recipe(int id, string name, List<String> courseTypes, List<String> cuisineTypes, int servingAmount, string servingName, Uri? recipeSourceUrl) {
         this.Id = id;
         this.Name = name;
         this.CourseTypes = courseTypes;
