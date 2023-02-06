@@ -1,14 +1,10 @@
 using food_history_api.Models;
+using food_history_api.DAOs;
 
 namespace food_history_api.Services;
 
 public class IngredientService {
-    public static List<Ingredient> Get(int recipeId) {
-        //TODO: Fill out
-        return null;
-    }
+    public static IngredientList Get(int recipeId) => IngredientDao.Get(recipeId);
 
-    public static void Update(int recipeId, List<Ingredient> ingredients){
-        //TODO: Fill out
-    }
+    public static void Update(IngredientList ingredientList) => IngredientDao.Update(ingredientList);
 }

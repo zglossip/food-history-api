@@ -2,6 +2,8 @@ namespace food_history_api.Models;
 
 public class Recipe {
     public int? Id {get; set;}
+
+    public Uri? Link {get; set;}
     
     public string Name {get; set;}
 
@@ -15,9 +17,9 @@ public class Recipe {
 
     public Uri? RecipeSourceUrl {get; set;}
 
-    public List<Ingredient>? Ingredients {get; set;}
+    public Uri? Ingredients {get; set;}
 
-    public List<string>? Instructions {get; set;}
+    public Uri? Instructions {get; set;}
 
     public Recipe(int id, string name, List<String> courseTypes, List<String> cuisineTypes, int servingAmount, string servingName, Uri? recipeSourceUrl) {
         this.Id = id;

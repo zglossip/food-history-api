@@ -5,17 +5,31 @@ using Microsoft.AspNetCore.Mvc;
 namespace food_history_api.Controllers;
 
 [ApiController]
-[Route("controller")]
+[Route("recipe")]
 public class RecipeController : ControllerBase {
 
     [HttpGet("{id}")]
-    public ActionResult<Recipe> Get(int id) => RecipeService.Get(id);
+    public ActionResult<Recipe> Get(int id) {
+        Recipe recipe = RecipeService.Get(id);
+
+        if(recipe == null) {
+            return NotFound();
+        }
+
+        FillOutRecipeLinks(recipe);
+
+        return recipe;
+    }
 
     [HttpGet]
     public ActionResult<List<Recipe>> GetAll() => RecipeService.GetAll();
 
-    [HttpGet]
+    [HttpGet("tags")]
     public ActionResult<List<Recipe>> GetForTags(List<string> tags) => RecipeService.GetForTags(tags);
+
+    private void FillOutRecipeLinks(Recipe recipe) {
+       //TODO: Set recipe URLs
+    }
 
     [HttpPost]
     public IActionResult Create(Recipe recipe) => CreatedAtAction(nameof(Get), new { id = RecipeService.Create(recipe) }, recipe);
@@ -44,23 +58,59 @@ public class RecipeController : ControllerBase {
         return NoContent();
     }
 
+    [HttpGet("{id}/ingredients")]
+    public ActionResult<IngredientList> GetIngredients(int id) {
+        
+        IngredientList ingredientList = IngredientService.Get(id);
+
+        if(ingredientList == null) {
+            return NotFound();
+        }
+
+        //TODO: Set recipe URL
+
+        return ingredientList;
+        
+    }
+
     [HttpPut("{id}/ingredients")]
-    public IActionResult UpdateIngredients(int id, List<Ingredient> ingredients){
+    public IActionResult UpdateIngredients(int id, IngredientList ingredientList){
+        if (id != ingredientList.RecipeId) {
+            return BadRequest();
+        }
+
         if(RecipeService.Get(id) == null) {
             return NotFound();
         }
         
-        IngredientService.Update(id, ingredients);
+        IngredientService.Update(ingredientList);
         return NoContent();
     }
 
+    [HttpGet("{id}/instructions")]
+    public ActionResult<InstructionList> GetInstructions(int id) {
+        InstructionList instructionList = InstructionService.Get(id);
+
+        if(instructionList == null) {
+            return NotFound();
+        }
+
+        //TODO: Set recipe URL
+
+        return instructionList;
+    }
+
     [HttpPut("{id}/instructions")]
-    public IActionResult UpdateInstructions(int id, List<string> instructions){
+    public IActionResult UpdateInstructions(int id, InstructionList instructionList){
+        if (id != instructionList.RecipeId) {
+            return BadRequest();
+        }
+
         if(RecipeService.Get(id) == null) {
             return NotFound();
         }
         
-        InstructionService.Update(id, instructions);
+        InstructionService.Update(instructionList);
         return NoContent();
     }
 
