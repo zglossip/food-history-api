@@ -1,22 +1,20 @@
 namespace food_history_api.Models;
 
 public class Ingredient {
-    public int? Id {get; set;}
     public Uri Recipe {get; set;}
     public string Name {get; set;}
 
-    public int Amount {get; set;}
+    public int Quantity {get; set;}
 
-    public string UnitName {get; set;}
+    public string Uom {get; set;}
 
     public string? Notes {get; set;}
 
-    public Ingredient(int id, Uri recipe, string name, int amount, string unitName, string notes) {
-        this.Id = id;
+    public Ingredient(Uri recipe, string name, int quantity, string uom, string notes) {
         this.Recipe = recipe;
         this.Name = name;
-        this.Amount = amount;
-        this.UnitName = unitName;
+        this.Quantity = quantity;
+        this.Uom = uom;
         this.Notes = notes;
     }
 

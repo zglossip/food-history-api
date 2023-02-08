@@ -11,6 +11,8 @@ public class Recipe {
 
     public List<string> CuisineTypes {get; set;}
 
+    public List<string> Tags { set; get;}
+
     public int ServingAmount {get; set;}
 
     public string ServingName {get; set;}
@@ -21,11 +23,12 @@ public class Recipe {
 
     public Uri? Instructions {get; set;}
 
-    public Recipe(int id, string name, List<String> courseTypes, List<String> cuisineTypes, int servingAmount, string servingName, Uri? recipeSourceUrl) {
+    public Recipe(int id, string name, List<String> courseTypes, List<String> cuisineTypes, List<string> tags, int servingAmount, string servingName, Uri? recipeSourceUrl) {
         this.Id = id;
         this.Name = name;
         this.CourseTypes = courseTypes;
         this.CuisineTypes = courseTypes;
+        this.Tags = tags;
         this.ServingAmount = servingAmount;
         this.ServingName = servingName;
         this.RecipeSourceUrl = recipeSourceUrl;
