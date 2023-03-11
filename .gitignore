@@ -1,3 +1,5 @@
 /.vscode
 /bin
 /obj
+connectionsettings.json
+/Controllers/TestController.cs
