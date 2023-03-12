@@ -14,6 +14,7 @@ public class IngredientDao : IIngredientDao
     {
         _databaseConnectionSupplier = databaseConnectionSupplier;
     }
+    
     public IngredientList Get(int recipeId)
     {
         List<Ingredient> ingredientList = new List<Ingredient>();

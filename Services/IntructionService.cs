@@ -14,5 +14,9 @@ public class InstructionService : IInstructionService {
 
     public InstructionList Get(int recipeId) => _instructionDao.Get(recipeId);
 
-    public void Update(InstructionList instructionList) => _instructionDao.Update(instructionList);
+    public void Update(InstructionList instructionList) 
+    {
+        _instructionDao.Delete(instructionList.RecipeId);
+        _instructionDao.Create(instructionList);
+    }
 }

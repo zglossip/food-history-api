@@ -47,5 +47,10 @@ public class DaoUtil
                                                         reader.GetInt32(reader.GetOrdinal("QUANTITY")),
                                                         reader.GetString(reader.GetOrdinal("UOM")), 
                                                         reader.GetString(reader.GetOrdinal("NOTES"))));
+    } 
+
+    public static Action<SqlDataReader> GetInstructionListAction(List<string> ingredients) 
+    {
+        return reader => ingredients.Add(reader.GetString(reader.GetOrdinal("TEXT")));
     }  
 }

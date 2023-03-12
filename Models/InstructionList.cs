@@ -5,10 +5,10 @@ public class InstructionList {
 
     public Uri? Recipe {get; set;}
 
-    public string Instruction {get; set;}
+    public List<string> Instructions {get; set;}
 
-    public InstructionList(int recipeId, string instruction){
+    public InstructionList(int recipeId, List<string> instructions){
         this.RecipeId = recipeId;
-        this.Instruction = instruction;
+        this.Instructions = instructions;
     }
 }
