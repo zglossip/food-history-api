@@ -1,11 +1,11 @@
-CREATE TABLE zglossip."TAG"
+CREATE TABLE food_history.tag
 (
-    "RECIPE_ID" integer NOT NULL,
-    "TEXT" character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "TAG_pkey" PRIMARY KEY ("RECIPE_ID", "TEXT"),
-    CONSTRAINT "TAG_UK" UNIQUE ("RECIPE_ID", "TEXT"),
-    CONSTRAINT "RECIPE_FK" FOREIGN KEY ("RECIPE_ID")
-        REFERENCES zglossip."RECIPE" ("ID") MATCH SIMPLE
+    recipe_id integer NOT NULL,
+    text character varying(20) NOT NULL,
+    CONSTRAINT "tag_pkey" PRIMARY KEY (recipe_id, text),
+    CONSTRAINT "tag_UK" UNIQUE (recipe_id, text),
+    CONSTRAINT "recipe_FK" FOREIGN KEY (recipe_id)
+        REFERENCES food_history.recipe (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 )

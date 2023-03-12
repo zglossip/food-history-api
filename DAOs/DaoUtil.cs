@@ -1,23 +1,24 @@
 using food_history_api.Models;
 
 using System.Data.SqlClient;
+using Npgsql;
 
 namespace food_history_api.DAOs;
 
 public class DaoUtil
 {
-    public static void Query(Action<SqlDataReader> action, string connectionString, string sql) => Query(action, connectionString, sql, new List<SqlParameter>());
-    public static void Query(Action<SqlDataReader> action, string connectionString, string sql, List<SqlParameter> parameters) 
+    public static void Query(Action<NpgsqlDataReader> action, string connectionString, string sql) => Query(action, connectionString, sql, new List<NpgsqlParameter>());
+    public static void Query(Action<NpgsqlDataReader> action, string connectionString, string sql, List<NpgsqlParameter> parameters) 
     {
-        using(SqlConnection connection = new SqlConnection(connectionString))
+        using(NpgsqlConnection connection = new NpgsqlConnection(connectionString))
         {
-            SqlCommand command = new SqlCommand(sql, connection);
+            NpgsqlCommand command = new NpgsqlCommand(sql, connection);
 
             parameters.ForEach(parameter => command.Parameters.Add(parameter));
 
             connection.Open();
 
-            SqlDataReader reader = command.ExecuteReader();
+            NpgsqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
             {
@@ -28,29 +29,29 @@ public class DaoUtil
         }
     }
 
-    public static void Execute(string connectionString, string sql) => Execute(connectionString, sql, new List<SqlParameter>());
+    public static void Execute(string connectionString, string sql) => Execute(connectionString, sql, new List<NpgsqlParameter>());
 
-    public static void Execute(string connectionString, string sql, List<SqlParameter> parameters)
+    public static void Execute(string connectionString, string sql, List<NpgsqlParameter> parameters)
     {
-        using(SqlConnection connection = new SqlConnection(connectionString))
+        using(NpgsqlConnection connection = new NpgsqlConnection(connectionString))
         {
-            SqlCommand command = new SqlCommand(sql, connection);
+            NpgsqlCommand command = new NpgsqlCommand(sql, connection);
             command.Parameters.Add(parameters);
             connection.Open();
             command.ExecuteNonQuery();
         }
     }
 
-    public static Action<SqlDataReader> GetIngredientListAction(List<Ingredient> ingredients) 
+    public static Action<NpgsqlDataReader> GetIngredientListAction(List<Ingredient> ingredients) 
     {
         return reader => ingredients.Add(new Ingredient(reader.GetInt32(reader.GetOrdinal("RECIPE_ID")), 
-                                                        reader.GetString(reader.GetOrdinal("NAME")), 
+                                                        reader.GetString(reader.GetOrdinal("INGREDIENT_NAME")), 
                                                         reader.GetInt32(reader.GetOrdinal("QUANTITY")),
                                                         reader.GetString(reader.GetOrdinal("UOM")), 
                                                         reader.GetString(reader.GetOrdinal("NOTES"))));
     } 
 
-    public static Action<SqlDataReader> GetInstructionListAction(List<string> ingredients) 
+    public static Action<NpgsqlDataReader> GetInstructionListAction(List<string> ingredients) 
     {
         return reader => ingredients.Add(reader.GetString(reader.GetOrdinal("TEXT")));
     }  

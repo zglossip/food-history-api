@@ -1,9 +1,9 @@
-CREATE TABLE zglossip.recipe
+CREATE TABLE food_history.recipe
 (
-    "ID" bigint NOT NULL DEFAULT nextval('zglossip."recipe_ID_seq"'::regclass),
-    "NAME" character varying(100) NOT NULL,
-    "SERVING_AMOUNT" integer NOT NULL,
-    "SERVING_NAME" character varying(20) NOT NULL,
-    "SOURCE" character varying(100),
-    CONSTRAINT recipe_pkey PRIMARY KEY ("ID")
+    id bigint NOT NULL DEFAULT nextval('food_history.recipe_id_seq'::regclass),
+    name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    serving_amount integer NOT NULL,
+    serving_name character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    source character varying(100) COLLATE pg_catalog."default",
+    CONSTRAINT recipe_pkey PRIMARY KEY (id)
 )

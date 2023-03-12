@@ -1,13 +1,13 @@
-CREATE TABLE zglossip."INGREDIENT"
+CREATE TABLE food_history.ingredient
 (
-    "NAME" character varying COLLATE NOT NULL,
-    "UOM" character varying COLLATE,
-    "QUANTITY" integer NOT NULL,
-    "NOTES" character varying(200),
-    "RECIPE_ID" integer NOT NULL,
-    CONSTRAINT "INGREDIENT_pkey" PRIMARY KEY ("RECIPE_ID", "NAME"),
-    CONSTRAINT "RECIPE_FK" FOREIGN KEY ("RECIPE_ID")
-        REFERENCES zglossip."RECIPE" ("ID") MATCH SIMPLE
+    ingredient_name character varying NOT NULL,
+    uom character varying,
+    quantity integer NOT NULL,
+    notes character varying(200),
+    recipe_id integer NOT NULL,
+    CONSTRAINT "ingredient_pkey" PRIMARY KEY (recipe_id, ingredient_name),
+    CONSTRAINT "recipe_FK" FOREIGN KEY (recipe_id)
+        REFERENCES food_history.recipe (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 )
