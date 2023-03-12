@@ -12,7 +12,8 @@ public class DaoUtil
         using(SqlConnection connection = new SqlConnection(connectionString))
         {
             SqlCommand command = new SqlCommand(sql, connection);
-            command.Parameters.Add(parameters);
+
+            parameters.ForEach(parameter => command.Parameters.Add(parameter));
 
             connection.Open();
 
