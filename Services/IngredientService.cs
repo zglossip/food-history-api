@@ -14,5 +14,8 @@ public class IngredientService : IIngredientService {
 
     public IngredientList Get(int recipeId) => _ingredientDao.Get(recipeId);
 
-    public void Update(IngredientList ingredientList) => _ingredientDao.Update(ingredientList);
+    public void Upsert(IngredientList ingredientList) {
+        _ingredientDao.Delete(ingredientList.RecipeId);
+        _ingredientDao.Create(ingredientList);
+    }
 }

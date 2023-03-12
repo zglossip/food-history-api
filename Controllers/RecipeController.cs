@@ -83,8 +83,8 @@ public class RecipeController : ControllerBase {
         
     }
 
-    [HttpPut("{id}/ingredients")]
-    public IActionResult UpdateIngredients(int id, IngredientList ingredientList){
+    [HttpPost("{id}/ingredients")]
+    public IActionResult UpsertIngredients(int id, IngredientList ingredientList){
         if (id != ingredientList.RecipeId) {
             return BadRequest();
         }
@@ -93,7 +93,7 @@ public class RecipeController : ControllerBase {
             return NotFound();
         }
         
-        _ingredientService.Update(ingredientList);
+        _ingredientService.Upsert(ingredientList);
         return NoContent();
     }
 

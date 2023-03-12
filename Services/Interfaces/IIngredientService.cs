@@ -5,5 +5,5 @@ using food_history_api.Models;
 public interface IIngredientService {
     public IngredientList Get(int recipeId);
 
-    public void Update(IngredientList ingredientList);
+    public void Upsert(IngredientList ingredientList);
 }

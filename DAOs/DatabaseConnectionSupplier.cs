@@ -1,13 +1,16 @@
+using food_history_api.DAOs.Interfaces;
+
 using System.Data.SqlClient;
 
 namespace food_history_api.DAOs;
 
-public class DatabaseConnectionSupplier {
+public class DatabaseConnectionSupplier : IDatabaseConnectionSupplier{
 
-    private string connectionString {get;}
+    private readonly string _connectionString;
 
-    DatabaseConnectionSupplier() {
-                IConfiguration config = new ConfigurationBuilder()
+    public DatabaseConnectionSupplier()
+    {
+        IConfiguration config = new ConfigurationBuilder()
             .AddJsonFile("connectionsettings.json")
             .Build();
 
@@ -17,6 +20,11 @@ public class DatabaseConnectionSupplier {
         builder.UserID = config["username"];
         builder.Password = config["password"];
 
-        connectionString = builder.ConnectionString;
+        _connectionString = builder.ConnectionString;
+    }
+
+    public string GetConnectionString()
+    {
+        return _connectionString;
     }
 }

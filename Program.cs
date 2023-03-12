@@ -6,6 +6,8 @@ using food_history_api.DAOs.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 //DI Setup
+builder.Services.AddSingleton<IDatabaseConnectionSupplier, DatabaseConnectionSupplier>();
+
 builder.Services.AddScoped<IIngredientDao, IngredientDao>();
 builder.Services.AddScoped<IInstructionDao, InstructionDao>();
 builder.Services.AddScoped<IRecipeDao, RecipeDao>();
