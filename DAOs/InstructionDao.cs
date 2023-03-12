@@ -1,14 +1,15 @@
 using food_history_api.Models;
+using food_history_api.DAOs.Interfaces;
 
 namespace food_history_api.DAOs;
 
-public class InstructionDao {
-    public static InstructionList Get(int recipeId) {
+public class InstructionDao : IInstructionDao {
+    public InstructionList Get(int recipeId) {
         //TODO: Fill out
         return null;
     }
 
-    public static void Update(InstructionList instructionList) {
+    public void Update(InstructionList instructionList) {
         //TODO: Fill out
     }
 }

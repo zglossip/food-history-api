@@ -1,10 +1,18 @@
 using food_history_api.Models;
-using food_history_api.DAOs;
+using food_history_api.DAOs.Interfaces;
+using food_history_api.Services.Interfaces;
 
 namespace food_history_api.Services;
 
-public class InstructionService {
-    public static InstructionList Get(int recipeId) => InstructionDao.Get(recipeId);
+public class InstructionService : IInstructionService {
 
-    public static void Update(InstructionList instructionList) => InstructionDao.Update(instructionList);
+    private readonly IInstructionDao _instructionDao;
+
+    public InstructionService(IInstructionDao instructionDao) {
+        _instructionDao = instructionDao;
+    }
+
+    public InstructionList Get(int recipeId) => _instructionDao.Get(recipeId);
+
+    public void Update(InstructionList instructionList) => _instructionDao.Update(instructionList);
 }

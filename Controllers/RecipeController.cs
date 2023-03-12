@@ -1,5 +1,5 @@
 using food_history_api.Models;
-using food_history_api.Services;
+using food_history_api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace food_history_api.Controllers;
@@ -8,9 +8,19 @@ namespace food_history_api.Controllers;
 [Route("recipe")]
 public class RecipeController : ControllerBase {
 
+    private readonly IIngredientService _ingredientService;
+    private readonly IInstructionService _instructionService;
+    private readonly IRecipeService _recipeService;
+
+    public RecipeController(IIngredientService ingredientService, IInstructionService instructionService, IRecipeService recipeService) {
+        _ingredientService = ingredientService;
+        _instructionService = instructionService;
+        _recipeService = recipeService;
+    }
+
     [HttpGet("{id}")]
     public ActionResult<Recipe> Get(int id) {
-        Recipe recipe = RecipeService.Get(id);
+        Recipe recipe = _recipeService.Get(id);
 
         if(recipe == null) {
             return NotFound();
@@ -22,17 +32,17 @@ public class RecipeController : ControllerBase {
     }
 
     [HttpGet]
-    public ActionResult<List<Recipe>> GetAll() => RecipeService.GetAll();
+    public ActionResult<List<Recipe>> GetAll() => _recipeService.GetAll();
 
     [HttpGet("tags")]
-    public ActionResult<List<Recipe>> GetForTags(List<string> tags) => RecipeService.GetForTags(tags);
+    public ActionResult<List<Recipe>> GetForTags(List<string> tags) => _recipeService.GetForTags(tags);
 
     private void FillOutRecipeLinks(Recipe recipe) {
        //TODO: Set recipe URLs
     }
 
     [HttpPost]
-    public IActionResult Create(Recipe recipe) => CreatedAtAction(nameof(Get), new { id = RecipeService.Create(recipe) }, recipe);
+    public IActionResult Create(Recipe recipe) => CreatedAtAction(nameof(Get), new { id = _recipeService.Create(recipe) }, recipe);
 
     [HttpPut("{id}")]
     public IActionResult Update(int id, Recipe recipe) {
@@ -40,28 +50,28 @@ public class RecipeController : ControllerBase {
             return BadRequest();
         }
 
-        if(RecipeService.Get(id) == null) {
+        if(_recipeService.Get(id) == null) {
             return NotFound();
         }
 
-        RecipeService.Update(recipe);
+        _recipeService.Update(recipe);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id) {
-        if(RecipeService.Get(id) == null) {
+        if(_recipeService.Get(id) == null) {
             return NotFound();
         }
 
-        RecipeService.Delete(id);
+        _recipeService.Delete(id);
         return NoContent();
     }
 
     [HttpGet("{id}/ingredients")]
     public ActionResult<IngredientList> GetIngredients(int id) {
         
-        IngredientList ingredientList = IngredientService.Get(id);
+        IngredientList ingredientList = _ingredientService.Get(id);
 
         if(ingredientList == null) {
             return NotFound();
@@ -79,17 +89,17 @@ public class RecipeController : ControllerBase {
             return BadRequest();
         }
 
-        if(RecipeService.Get(id) == null) {
+        if(_recipeService.Get(id) == null) {
             return NotFound();
         }
         
-        IngredientService.Update(ingredientList);
+        _ingredientService.Update(ingredientList);
         return NoContent();
     }
 
     [HttpGet("{id}/instructions")]
     public ActionResult<InstructionList> GetInstructions(int id) {
-        InstructionList instructionList = InstructionService.Get(id);
+        InstructionList instructionList = _instructionService.Get(id);
 
         if(instructionList == null) {
             return NotFound();
@@ -106,11 +116,11 @@ public class RecipeController : ControllerBase {
             return BadRequest();
         }
 
-        if(RecipeService.Get(id) == null) {
+        if(_recipeService.Get(id) == null) {
             return NotFound();
         }
         
-        InstructionService.Update(instructionList);
+        _instructionService.Update(instructionList);
         return NoContent();
     }
 

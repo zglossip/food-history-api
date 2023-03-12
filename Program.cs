@@ -1,4 +1,18 @@
+using food_history_api.Services;
+using food_history_api.Services.Interfaces;
+using food_history_api.DAOs;
+using food_history_api.DAOs.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//DI Setup
+builder.Services.AddScoped<IIngredientDao, IngredientDao>();
+builder.Services.AddScoped<IInstructionDao, InstructionDao>();
+builder.Services.AddScoped<IRecipeDao, RecipeDao>();
+
+builder.Services.AddScoped<IIngredientService, IngredientService>();
+builder.Services.AddScoped<IInstructionService, InstructionService>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 // Add services to the container.
 

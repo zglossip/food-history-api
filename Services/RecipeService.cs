@@ -1,20 +1,27 @@
 using food_history_api.Models;
-using food_history_api.DAOs;
+using food_history_api.DAOs.Interfaces;
+using food_history_api.Services.Interfaces;
 
 namespace food_history_api.Services;
 
-public class RecipeService {
+public class RecipeService : IRecipeService{
 
-    public static Recipe Get(int id) => RecipeDao.Get(id);
+    private readonly IRecipeDao _recipeDao;
 
-    public static List<Recipe> GetAll() => RecipeDao.GetAll();
+    public RecipeService(IRecipeDao recipeDao) {
+        _recipeDao = recipeDao;
+    }
 
-    public static List<Recipe> GetForTags(List<string> tags) => RecipeDao.GetForTags(tags);
+    public Recipe Get(int id) => _recipeDao.Get(id);
 
-    public static int Create(Recipe recipe) => RecipeDao.Create(recipe);
+    public List<Recipe> GetAll() => _recipeDao.GetAll();
 
-    public static void Update(Recipe recipe) => RecipeDao.Update(recipe);
+    public List<Recipe> GetForTags(List<string> tags) => _recipeDao.GetForTags(tags);
 
-    public static void Delete(int id) => RecipeDao.Delete(id);
+    public int Create(Recipe recipe) => _recipeDao.Create(recipe);
+
+    public void Update(Recipe recipe) => _recipeDao.Update(recipe);
+
+    public void Delete(int id) => _recipeDao.Delete(id);
 
 }
