@@ -32,6 +32,44 @@ public class RecipeDao : IRecipeDao
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper());
     }
 
+    public List<Recipe> GetForCourses(List<string> courses)
+    {
+        string sql = " SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source" +
+                     " FROM food_history.recipe r" +
+                     " JOIN food_history.course c" +
+                     " ON r.id = c.recipe_id" +
+                     " WHERE c.text in (@courses)" +
+                     " GROUP BY r.id" +
+                     " HAVING COUNT(DISTINCT c.text) = @coursesLength";
+
+        List<NpgsqlParameter> parameters = new List<NpgsqlParameter>()
+        {
+            new NpgsqlParameter("@courses", courses),
+            new NpgsqlParameter("@coursesLength", courses.Count())
+        };
+
+        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
+    }
+
+    public List<Recipe> GetForCuisines(List<string> cuisines)
+    {
+        string sql = " SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source" +
+                     " FROM food_history.recipe r" +
+                     " JOIN food_history.cuisine c" +
+                     " ON r.id = c.recipe_id" +
+                     " WHERE c.text in (@cuisines)" +
+                     " GROUP BY r.id" +
+                     " HAVING COUNT(DISTINCT c.text) = @cuisinesLength";
+
+        List<NpgsqlParameter> parameters = new List<NpgsqlParameter>()
+        {
+            new NpgsqlParameter("@cuisines", cuisines),
+            new NpgsqlParameter("@cuisinesLength", cuisines.Count())
+        };
+
+        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
+    }
+    
     public List<Recipe> GetForTags(List<string> tags) {
         string sql = " SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source" +
                      " FROM food_history.recipe r" +

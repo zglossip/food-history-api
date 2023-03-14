@@ -7,6 +7,10 @@ public interface IRecipeDao {
 
     public List<Recipe> GetAll();
 
+    public List<Recipe> GetForCourses(List<string> courses);
+
+    public List<Recipe> GetForCuisines(List<string> cuisines);
+
     public List<Recipe> GetForTags(List<string> tags);
 
     public int Create(Recipe recipe);

@@ -20,33 +20,35 @@ public class RecipeService : IRecipeService{
 
     public Recipe Get(int id)
     {
-        Recipe recipe = _recipeDao.Get(id);
-        recipe.CourseTypes = _courseDao.Get(id);
-        recipe.CuisineTypes = _cuisineDao.Get(id);
-        recipe.Tags = _tagDao.Get(id);
-        return recipe;
+        return _getPopulatedRecipe(_recipeDao.Get(id));
     }
 
     public List<Recipe> GetAll()
     {
-        List<Recipe> recipeList = _recipeDao.GetAll();
-        recipeList.ForEach(recipe => {
-            recipe.CourseTypes = _courseDao.Get((int)recipe.Id);
-            recipe.CuisineTypes = _cuisineDao.Get((int)recipe.Id);
-            recipe.Tags = _tagDao.Get((int)recipe.Id);
-        });
-        return recipeList;
+        return _recipeDao.GetAll().Select(recipe => _getPopulatedRecipe(recipe)).ToList();
     }
 
+    public List<Recipe> GetForCourses(List<string> courses)
+    {
+        return _recipeDao.GetForCourses(courses).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
+    }
+
+    public List<Recipe> GetForCuisines(List<string> cuisines)
+    {
+        return _recipeDao.GetForCuisines(cuisines).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
+    }
+    
     public List<Recipe> GetForTags(List<string> tags)
     {
-        List<Recipe> recipeList = _recipeDao.GetForTags(tags);
-        recipeList.ForEach(recipe => {
-            recipe.CourseTypes = _courseDao.Get((int)recipe.Id);
-            recipe.CuisineTypes = _cuisineDao.Get((int)recipe.Id);
-            recipe.Tags = _tagDao.Get((int)recipe.Id);
-        });
-        return recipeList;
+        return _recipeDao.GetForTags(tags).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
+    }
+
+    private Recipe _getPopulatedRecipe(Recipe recipe) {
+        Recipe newRecipe = recipe.Clone();
+        newRecipe.CourseTypes = _courseDao.Get((int)recipe.Id);
+        newRecipe.CuisineTypes = _cuisineDao.Get((int)recipe.Id);
+        newRecipe.Tags = _tagDao.Get((int)recipe.Id);
+        return newRecipe;
     }
 
     public int Create(Recipe recipe)

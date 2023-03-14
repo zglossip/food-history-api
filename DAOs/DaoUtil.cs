@@ -1,4 +1,3 @@
-using food_history_api.Models;
 using food_history_api.DAOs.Mappers;
 
 using Npgsql;
@@ -8,7 +7,7 @@ namespace food_history_api.DAOs;
 public class DaoUtil
 {
 
-    public static T Query<T>(string connectionString, string sql, AbstractMapper<T> mapper, List<NpgsqlParameter>? parameters = null)
+    public static T? Query<T>(string connectionString, string sql, AbstractMapper<T> mapper, List<NpgsqlParameter>? parameters = null)
     {
         List<T> results = QueryForList(connectionString, sql, mapper, parameters);
 

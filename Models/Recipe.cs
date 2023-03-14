@@ -36,4 +36,24 @@ public class Recipe {
         this.ServingName = ServingName;
         this.RecipeSourceUrl = RecipeSourceUrl;
     }
+
+    public Recipe(Recipe recipe)
+    {
+        Id = recipe.Id;
+        Link = recipe.Link;
+        Name = recipe.Name;
+        CourseTypes = recipe.CourseTypes;
+        CuisineTypes = recipe.CuisineTypes;
+        Tags = recipe.Tags;
+        ServingAmount = recipe.ServingAmount;
+        ServingName = recipe.ServingName;
+        RecipeSourceUrl = recipe.RecipeSourceUrl;
+        Ingredients = recipe.Ingredients;
+        Instructions = recipe.Instructions;
+    }
+
+    public Recipe Clone()
+    {
+        return new Recipe(this);
+    }
 }

@@ -39,6 +39,22 @@ public class RecipeController : ControllerBase {
         return recipes;
     }
 
+    [HttpGet("courses")]
+    public ActionResult<List<Recipe>> GetForCourses(List<string> cuisines)
+    {
+        List<Recipe> recipes = _recipeService.GetForCourses(cuisines);
+        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
+        return recipes;
+    }
+
+    [HttpGet("cusines")]
+    public ActionResult<List<Recipe>> GetForCuisines(List<string> cuisines)
+    {
+        List<Recipe> recipes = _recipeService.GetForCuisines(cuisines);
+        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
+        return recipes;
+    }
+
     [HttpGet("tags")]
     public ActionResult<List<Recipe>> GetForTags(List<string> tags)
     {
