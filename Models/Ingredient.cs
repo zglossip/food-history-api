@@ -11,6 +11,9 @@ public class Ingredient {
 
     public string? Notes {get; set;}
 
+    //Only for use by deserialization
+    public Ingredient(){}
+
     public Ingredient(int recipeId, string name, int quantity, string uom, string notes) {
         this.RecipeId = recipeId;
         this.Name = name;

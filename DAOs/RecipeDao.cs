@@ -62,7 +62,7 @@ public class RecipeDao : IRecipeDao
             new NpgsqlParameter("@name", recipe.Name),
             new NpgsqlParameter("@servingAmount", recipe.ServingAmount),
             new NpgsqlParameter("@servingName", recipe.ServingName),
-            new NpgsqlParameter("@source", recipe.RecipeSourceUrl)
+            new NpgsqlParameter("@source", recipe.RecipeSourceUrl.ToString())
         };
 
         return DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);

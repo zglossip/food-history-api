@@ -1,13 +1,9 @@
-using Newtonsoft.Json;
-
 namespace food_history_api.Models;
 
 public class Recipe {
-    [JsonIgnore]
     public int? Id {get; set;}
 
-    [JsonIgnore]
-    public Uri? Link {get; set;}
+    public string? Link {get; set;}
     
     public string Name {get; set;}
 
@@ -21,23 +17,23 @@ public class Recipe {
 
     public string ServingName {get; set;}
 
-    [JsonIgnore]
     public Uri? RecipeSourceUrl {get; set;}
 
-    [JsonIgnore]
-    public Uri? Ingredients {get; set;}
+    public string? Ingredients {get; set;}
 
-    [JsonIgnore]
-    public Uri? Instructions {get; set;}
+    public string? Instructions {get; set;}
 
-    public Recipe(int id, string name, int servingAmount, string servingName, Uri? recipeSourceUrl) {
-        this.Id = id;
-        this.Name = name;
+    //Only for use by deserialization
+    public Recipe(){}
+
+    public Recipe(int Id, string Name, int ServingAmount, string ServingName, Uri? RecipeSourceUrl) {
+        this.Id = Id;
+        this.Name = Name;
         this.CourseTypes = new List<string>();
         this.CuisineTypes = new List<string>();
         this.Tags = new List<String>();
-        this.ServingAmount = servingAmount;
-        this.ServingName = servingName;
-        this.RecipeSourceUrl = recipeSourceUrl;
+        this.ServingAmount = ServingAmount;
+        this.ServingName = ServingName;
+        this.RecipeSourceUrl = RecipeSourceUrl;
     }
 }

@@ -32,17 +32,29 @@ public class RecipeController : ControllerBase {
     }
 
     [HttpGet]
-    public ActionResult<List<Recipe>> GetAll() => _recipeService.GetAll();
+    public ActionResult<List<Recipe>> GetAll()
+    {
+        List<Recipe> recipes =_recipeService.GetAll();
+        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
+        return recipes;
+    }
 
     [HttpGet("tags")]
-    public ActionResult<List<Recipe>> GetForTags(List<string> tags) => _recipeService.GetForTags(tags);
-
-    private void FillOutRecipeLinks(Recipe recipe) {
-       //TODO: Set recipe URLs
+    public ActionResult<List<Recipe>> GetForTags(List<string> tags)
+    {
+        
+        List<Recipe> recipes = _recipeService.GetForTags(tags);
+        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
+        return recipes;
     }
 
     [HttpPost]
-    public IActionResult Create(Recipe recipe) => CreatedAtAction(nameof(Get), new { id = _recipeService.Create(recipe) }, recipe);
+    public IActionResult Create(Recipe recipe)
+    {
+        int id = _recipeService.Create(recipe);
+        recipe.Id = id;
+        return CreatedAtAction(nameof(Get), new { id = id }, recipe);
+    }
 
     [HttpPut("{id}")]
     public IActionResult Update(int id, Recipe recipe) {
@@ -77,7 +89,7 @@ public class RecipeController : ControllerBase {
             return NotFound();
         }
 
-        //TODO: Set recipe URL
+        _fillOutIngredientListLinks(ingredientList);
 
         return ingredientList;
         
@@ -105,7 +117,7 @@ public class RecipeController : ControllerBase {
             return NotFound();
         }
 
-        //TODO: Set recipe URL
+        _fillOutInstructionListLinks(instructionList);
 
         return instructionList;
     }
@@ -122,6 +134,23 @@ public class RecipeController : ControllerBase {
         
         _instructionService.Update(instructionList);
         return NoContent();
+    }
+
+    private void FillOutRecipeLinks(Recipe recipe)
+    {
+        recipe.Link = UrlHelperExtensions.Action(Url, nameof(Get), new {id = recipe.Id});
+        recipe.Ingredients = UrlHelperExtensions.Action(Url, nameof(GetIngredients), new {id = recipe.Id});
+        recipe.Instructions = UrlHelperExtensions.Action(Url, nameof(GetInstructions), new {id = recipe.Id});
+    }
+
+    private void _fillOutIngredientListLinks(IngredientList ingredientList)
+    {
+        ingredientList.Recipe = UrlHelperExtensions.Action(Url, nameof(Get), new {id = ingredientList.RecipeId});
+    }
+
+    private void _fillOutInstructionListLinks(InstructionList instructionList)
+    {
+        instructionList.Recipe = UrlHelperExtensions.Action(Url, nameof(Get), new {id = instructionList.RecipeId});
     }
 
 }
