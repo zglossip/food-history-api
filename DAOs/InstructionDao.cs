@@ -1,7 +1,6 @@
-using food_history_api.Models;
 using food_history_api.DAOs.Interfaces;
+using food_history_api.DAOs.Mappers;
 
-using System.Data.SqlClient;
 using Npgsql;
 
 namespace food_history_api.DAOs;
@@ -15,21 +14,17 @@ public class InstructionDao : IInstructionDao {
         _databaseConnectionSupplier = databaseConnectionSupplier;
     }
 
-    public InstructionList Get(int recipeId)
+    public List<string> Get(int recipeId)
     {
-        List<string> instructionList = new List<string>();
-
         string sql = "SELECT TEXT " +
                      "FROM food_history.INSTRUCTION " +
                      "WHERE RECIPE_ID = @recipeId " +
                      "ORDER BY POSITION ASC";
 
-        DaoUtil.Query((DaoUtil.GetInstructionListAction(instructionList)), 
-                      _databaseConnectionSupplier.GetConnectionString(), 
+        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), 
                       sql, 
+                      new InstructionMapper(),
                       new List<NpgsqlParameter>{new NpgsqlParameter("@recipeId", recipeId)});
-
-        return new InstructionList(recipeId, instructionList);
     }
 
     public void Delete(int recipeId)
@@ -42,23 +37,23 @@ public class InstructionDao : IInstructionDao {
                         new List<NpgsqlParameter>{new NpgsqlParameter("@recipeId", recipeId)});
     }
 
-    public void Create(InstructionList instructionList)
+    public void Create(List<string> instructions, int recipeId)
     {
         string sql = "INSERT INTO food_history.INSTRUCTION (RECIPE_ID, POSITION, TEXT) " +
                      "VALUES(@recipeId, @position, @text)";
 
         int position = 0;
 
-        instructionList.Instructions.ForEach(instruction => 
+        instructions.ForEach(instruction => 
         {
             List<NpgsqlParameter> sqlParameters = new List<NpgsqlParameter>
             {
-                new NpgsqlParameter("@recipeId", instructionList.RecipeId),
+                new NpgsqlParameter("@recipeId", recipeId),
                 new NpgsqlParameter("@position", position++),
                 new NpgsqlParameter("@text", instruction)
             };
 
-            DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(),
+            DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(),
                             sql,
                             sqlParameters);
         });

@@ -12,11 +12,11 @@ public class InstructionService : IInstructionService {
         _instructionDao = instructionDao;
     }
 
-    public InstructionList Get(int recipeId) => _instructionDao.Get(recipeId);
+    public InstructionList Get(int recipeId) => new InstructionList(recipeId, _instructionDao.Get(recipeId));
 
     public void Update(InstructionList instructionList) 
     {
         _instructionDao.Delete(instructionList.RecipeId);
-        _instructionDao.Create(instructionList);
+        _instructionDao.Create(instructionList.Instructions, instructionList.RecipeId);
     }
 }

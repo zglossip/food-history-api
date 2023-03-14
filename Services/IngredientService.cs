@@ -12,10 +12,10 @@ public class IngredientService : IIngredientService {
         _ingredientDao = ingredientDao;
     }
 
-    public IngredientList Get(int recipeId) => _ingredientDao.Get(recipeId);
+    public IngredientList Get(int recipeId) => new IngredientList(recipeId, _ingredientDao.Get(recipeId));
 
     public void Upsert(IngredientList ingredientList) {
         _ingredientDao.Delete(ingredientList.RecipeId);
-        _ingredientDao.Create(ingredientList);
+        _ingredientDao.Create(ingredientList.Ingredients, ingredientList.RecipeId);
     }
 }

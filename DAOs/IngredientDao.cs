@@ -1,7 +1,7 @@
 using food_history_api.Models;
 using food_history_api.DAOs.Interfaces;
+using food_history_api.DAOs.Mappers;
 
-using System.Data.SqlClient;
 using Npgsql;
 
 namespace food_history_api.DAOs;
@@ -16,20 +16,16 @@ public class IngredientDao : IIngredientDao
         _databaseConnectionSupplier = databaseConnectionSupplier;
     }
     
-    public IngredientList Get(int recipeId)
+    public List<Ingredient> Get(int recipeId)
     {
-        List<Ingredient> ingredientList = new List<Ingredient>();
-
-        string sql = "SELECT RECIPE_ID, INGREDIENT_NAME, QUANTITY, UOM, NOTES " +
+        string sql = "SELECT RECIPE_ID, NAME, QUANTITY, UOM, NOTES " +
                      "FROM food_history.INGREDIENT " +
                      "WHERE RECIPE_ID = @recipeId";
 
-        DaoUtil.Query(DaoUtil.GetIngredientListAction(ingredientList), 
-                      _databaseConnectionSupplier.GetConnectionString(), 
+        return DaoUtil.QueryForList( _databaseConnectionSupplier.GetConnectionString(), 
                       sql, 
+                      new IngredientMapper(),
                       new List<NpgsqlParameter>{new NpgsqlParameter("@recipeId", recipeId)});
-
-        return new IngredientList(recipeId, ingredientList);
     }
 
     public void Delete(int recipeId)
@@ -42,24 +38,24 @@ public class IngredientDao : IIngredientDao
                         new List<NpgsqlParameter>{new NpgsqlParameter("@recipeId", recipeId)});
     }
 
-    public void Create(IngredientList ingredientList)
+    public void Create(List<Ingredient> ingredientList, int recipeId)
     {
-        string sql = "INSERT INTO food_history.INGREDIENT (RECIPE_ID, INGREDIENT_NAME, QUANTITY, UOM, NOTES) " +
+        string sql = "INSERT INTO food_history.INGREDIENT (RECIPE_ID, NAME, QUANTITY, UOM, NOTES) " +
                      "VALUES(@recipeId, @name, @quantity, @uom, @notes)";
 
 
-        ingredientList.Ingredients.ForEach(ingredient => 
+        ingredientList.ForEach(ingredient => 
         {
             List<NpgsqlParameter> sqlParameters = new List<NpgsqlParameter>
             {
-                new NpgsqlParameter("@recipeId", ingredientList.RecipeId),
+                new NpgsqlParameter("@recipeId", recipeId),
                 new NpgsqlParameter("@name", ingredient.Name),
                 new NpgsqlParameter("@quantity", ingredient.Quantity),
                 new NpgsqlParameter("@uom", ingredient.Uom),
                 new NpgsqlParameter("@notes", ingredient.Notes)
             };
 
-            DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(),
+            DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(),
                             sql,
                             sqlParameters);
         });
