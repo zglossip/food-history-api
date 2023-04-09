@@ -24,24 +24,21 @@ public class RecipeService : IRecipeService{
         return _getPopulatedRecipe(_recipeDao.Get(id));
     }
 
-    public List<Recipe> GetAll()
+    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse)
     {
-        return _recipeDao.GetAll().Select(recipe => _getPopulatedRecipe(recipe)).ToList();
-    }
+        List<Recipe> recipes = _recipeDao.Get(courses, cuisines, tags, sortColumn).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
 
-    public List<Recipe> GetForCourses(List<string> courses)
-    {
-        return _recipeDao.GetForCourses(courses).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
-    }
+        switch(sortColumn)
+        {
+            case RecipeColumn.NAME:
+                recipes.Sort((x,y) => (reverse != null && reverse.Value ? -1 : 1) * x.Name.CompareTo(y.Name));
+                break;
+            default:
+                recipes.Sort((x,y) => (reverse != null && reverse.Value ? -1 : 1) * (x.Id < y.Id ? -1 : x.Id == y.Id ? 0 : 1));
+                break;
+        }
 
-    public List<Recipe> GetForCuisines(List<string> cuisines)
-    {
-        return _recipeDao.GetForCuisines(cuisines).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
-    }
-    
-    public List<Recipe> GetForTags(List<string> tags)
-    {
-        return _recipeDao.GetForTags(tags).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
+        return recipes;
     }
 
     private Recipe _getPopulatedRecipe(Recipe? recipe) 
@@ -82,21 +79,4 @@ public class RecipeService : IRecipeService{
     }
 
     public void Delete(int id) => _recipeDao.Delete(id);
-
-    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse)
-    {
-        List<Recipe> recipes = _recipeDao.Get(courses, cuisines, tags, sortColumn).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
-
-        switch(sortColumn)
-        {
-            case RecipeColumn.NAME:
-                recipes.Sort((x,y) => (reverse != null && reverse.Value ? -1 : 1) * x.Name.CompareTo(y.Name));
-                break;
-            default:
-                recipes.Sort((x,y) => (reverse != null && reverse.Value ? -1 : 1) * (x.Id < y.Id ? -1 : x.Id == y.Id ? 0 : 1));
-                break;
-        }
-
-        return recipes;
-    }
 }

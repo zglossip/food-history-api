@@ -32,39 +32,6 @@ public class RecipeController : ControllerBase {
         return recipe;
     }
 
-    // [HttpGet]
-    // public ActionResult<List<Recipe>> GetAll()
-    // {
-    //     List<Recipe> recipes =_recipeService.GetAll();
-    //     recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
-    //     return recipes;
-    // }
-
-    [HttpGet("courses")]
-    public ActionResult<List<Recipe>> GetForCourses([FromQuery(Name = "course")] List<string> courses)
-    {
-        List<Recipe> recipes = _recipeService.GetForCourses(courses);
-        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
-        return recipes;
-    }
-
-    [HttpGet("cusines")]
-    public ActionResult<List<Recipe>> GetForCuisines([FromQuery(Name = "cuisine")] List<string> cuisines)
-    {
-        List<Recipe> recipes = _recipeService.GetForCuisines(cuisines);
-        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
-        return recipes;
-    }
-
-    [HttpGet("tags")]
-    public ActionResult<List<Recipe>> GetForTags([FromQuery(Name = "tag")] List<string> tags)
-    {
-        
-        List<Recipe> recipes = _recipeService.GetForTags(tags);
-        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
-        return recipes;
-    }
-
     [HttpGet]
     public ActionResult<List<Recipe>> Get([FromQuery(Name = "course")] List<string> courses, [FromQuery(Name = "cuisine")] List<string> cuisines, [FromQuery(Name = "tag")] List<string> tags, [FromQuery(Name = "sort")] string? sort, [FromQuery(Name = "reverse")] bool? reverse)
     {
