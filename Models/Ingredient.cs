@@ -5,7 +5,7 @@ public class Ingredient {
 
     public int Quantity {get; set;}
 
-    public string Uom {get; set;}
+    public string? Uom {get; set;}
 
     public string? Notes {get; set;}
 
@@ -17,7 +17,7 @@ public class Ingredient {
         this.Uom = "ERROR";
     }
 
-    public Ingredient(string name, int quantity, string uom, string? notes)
+    public Ingredient(string name, int quantity, string? uom, string? notes)
     {
         this.Name = name;
         this.Quantity = quantity;

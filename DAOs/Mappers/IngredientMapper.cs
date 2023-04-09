@@ -6,16 +6,22 @@ public class IngredientMapper : AbstractMapper<Ingredient>
 {
     public IngredientMapper() : base(reader => {
         string? notes = null;
+        string? uom = null;
 
         if(!reader.IsDBNull(reader.GetOrdinal("notes")))
         {
             notes = reader.GetString(reader.GetOrdinal("notes"));
         }
 
+        if(!reader.IsDBNull(reader.GetOrdinal("uom")))
+        {
+            uom = reader.GetString(reader.GetOrdinal("uom"));
+        }
+
         return new Ingredient(
             reader.GetString(reader.GetOrdinal("name")),
             reader.GetInt32(reader.GetOrdinal("quantity")),
-            reader.GetString(reader.GetOrdinal("uom")),
+            uom,
             notes
         );
     }){}

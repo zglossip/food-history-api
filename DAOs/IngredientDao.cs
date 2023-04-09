@@ -52,7 +52,7 @@ public class IngredientDao : IIngredientDao
                 new NpgsqlParameter("@recipeId", recipeId),
                 new NpgsqlParameter("@name", ingredient.Name),
                 new NpgsqlParameter("@quantity", ingredient.Quantity),
-                new NpgsqlParameter("@uom", ingredient.Uom),
+                new NpgsqlParameter("@uom", ingredient.Uom == null ? DBNull.Value : ingredient.Uom),
                 new NpgsqlParameter("@notes", ingredient.Notes == null ? DBNull.Value : ingredient.Notes)
             };
 
