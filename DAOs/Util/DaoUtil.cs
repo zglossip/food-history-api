@@ -2,7 +2,7 @@ using food_history_api.DAOs.Mappers;
 
 using Npgsql;
 
-namespace food_history_api.DAOs;
+namespace food_history_api.DAOs.Util;
 
 public class DaoUtil
 {

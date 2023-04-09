@@ -1,6 +1,7 @@
 using food_history_api.Models;
 using food_history_api.DAOs.Interfaces;
 using food_history_api.DAOs.Mappers;
+using food_history_api.DAOs.Util;
 
 using Npgsql;
 

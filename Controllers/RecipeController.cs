@@ -40,15 +40,15 @@ public class RecipeController : ControllerBase {
     }
 
     [HttpGet("courses")]
-    public ActionResult<List<Recipe>> GetForCourses(List<string> cuisines)
+    public ActionResult<List<Recipe>> GetForCourses([FromQuery(Name = "course")] List<string> courses)
     {
-        List<Recipe> recipes = _recipeService.GetForCourses(cuisines);
+        List<Recipe> recipes = _recipeService.GetForCourses(courses);
         recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
         return recipes;
     }
 
     [HttpGet("cusines")]
-    public ActionResult<List<Recipe>> GetForCuisines(List<string> cuisines)
+    public ActionResult<List<Recipe>> GetForCuisines([FromQuery(Name = "cuisine")] List<string> cuisines)
     {
         List<Recipe> recipes = _recipeService.GetForCuisines(cuisines);
         recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
@@ -56,7 +56,7 @@ public class RecipeController : ControllerBase {
     }
 
     [HttpGet("tags")]
-    public ActionResult<List<Recipe>> GetForTags(List<string> tags)
+    public ActionResult<List<Recipe>> GetForTags([FromQuery(Name = "tag")] List<string> tags)
     {
         
         List<Recipe> recipes = _recipeService.GetForTags(tags);

@@ -1,6 +1,7 @@
 using food_history_api.Models;
 using food_history_api.DAOs.Interfaces;
 using food_history_api.DAOs.Mappers;
+using food_history_api.DAOs.Util;
 
 using Npgsql;
 
@@ -57,18 +58,20 @@ public class RecipeDao : IRecipeDao
                      " FROM food_history.recipe r" +
                      " JOIN food_history.cuisine c" +
                      " ON r.id = c.recipe_id" +
-                     " WHERE c.text in (@cuisines)" +
+                     " WHERE c.text IN (" + string.Join(",", Enumerable.Range(0, cuisines.Count).Select(i => $"@cuisine{i}")) + ")" +
                      " GROUP BY r.id" +
                      " HAVING COUNT(DISTINCT c.text) = @cuisinesLength";
 
-        List<NpgsqlParameter> parameters = new List<NpgsqlParameter>()
+        List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
+        for (int i = 0; i < cuisines.Count; i++)
         {
-            new NpgsqlParameter("@cuisines", cuisines),
-            new NpgsqlParameter("@cuisinesLength", cuisines.Count())
-        };
+            parameters.Add(new NpgsqlParameter($"@cuisine{i}", cuisines[i]));
+        }
+        parameters.Add(new NpgsqlParameter("@cuisinesLength", cuisines.Count));
 
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
+
     
     public List<Recipe> GetForTags(List<string> tags) {
         string sql = " SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source" +
