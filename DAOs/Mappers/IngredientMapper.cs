@@ -5,12 +5,18 @@ namespace food_history_api.DAOs.Mappers;
 public class IngredientMapper : AbstractMapper<Ingredient>
 {
     public IngredientMapper() : base(reader => {
+        string? notes = null;
+
+        if(!reader.IsDBNull(reader.GetOrdinal("notes")))
+        {
+            notes = reader.GetString(reader.GetOrdinal("notes"));
+        }
+
         return new Ingredient(
-            reader.GetInt32(reader.GetOrdinal("recipe_id")),
             reader.GetString(reader.GetOrdinal("name")),
             reader.GetInt32(reader.GetOrdinal("quantity")),
             reader.GetString(reader.GetOrdinal("uom")),
-            reader.GetString(reader.GetOrdinal("notes"))
+            notes
         );
     }){}
 }

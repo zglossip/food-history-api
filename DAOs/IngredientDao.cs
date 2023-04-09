@@ -19,7 +19,7 @@ public class IngredientDao : IIngredientDao
     
     public List<Ingredient> Get(int recipeId)
     {
-        string sql = "SELECT RECIPE_ID, NAME, QUANTITY, UOM, NOTES " +
+        string sql = "SELECT NAME, QUANTITY, UOM, NOTES " +
                      "FROM food_history.INGREDIENT " +
                      "WHERE RECIPE_ID = @recipeId";
 
@@ -53,7 +53,7 @@ public class IngredientDao : IIngredientDao
                 new NpgsqlParameter("@name", ingredient.Name),
                 new NpgsqlParameter("@quantity", ingredient.Quantity),
                 new NpgsqlParameter("@uom", ingredient.Uom),
-                new NpgsqlParameter("@notes", ingredient.Notes)
+                new NpgsqlParameter("@notes", ingredient.Notes == null ? DBNull.Value : ingredient.Notes)
             };
 
             DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(),

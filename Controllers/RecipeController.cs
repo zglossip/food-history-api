@@ -74,14 +74,11 @@ public class RecipeController : ControllerBase {
 
     [HttpPut("{id}")]
     public IActionResult Update(int id, Recipe recipe) {
-        if (id != recipe.Id) {
-            return BadRequest();
-        }
-
         if(_recipeService.Get(id) == null) {
             return NotFound();
         }
 
+        recipe.Id = id;
         _recipeService.Update(recipe);
         return NoContent();
     }
@@ -111,17 +108,14 @@ public class RecipeController : ControllerBase {
         
     }
 
-    [HttpPost("{id}/ingredients")]
-    public IActionResult UpsertIngredients(int id, IngredientList ingredientList){
-        if (id != ingredientList.RecipeId) {
-            return BadRequest();
-        }
-
+    [HttpPut("{id}/ingredients")]
+    public IActionResult UpdateIngredients(int id, IngredientList ingredientList){
         if(_recipeService.Get(id) == null) {
             return NotFound();
         }
-        
-        _ingredientService.Upsert(ingredientList);
+
+        ingredientList.RecipeId = id;
+        _ingredientService.Update(ingredientList);
         return NoContent();
     }
 
@@ -140,14 +134,11 @@ public class RecipeController : ControllerBase {
 
     [HttpPut("{id}/instructions")]
     public IActionResult UpdateInstructions(int id, InstructionList instructionList){
-        if (id != instructionList.RecipeId) {
-            return BadRequest();
-        }
-
         if(_recipeService.Get(id) == null) {
             return NotFound();
         }
         
+        instructionList.RecipeId = id;
         _instructionService.Update(instructionList);
         return NoContent();
     }

@@ -35,58 +35,59 @@ public class RecipeDao : IRecipeDao
 
     public List<Recipe> GetForCourses(List<string> courses)
     {
+        QueryParamList<string> queryParamList = new QueryParamList<string>("course", courses);
+
         string sql = " SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source" +
                      " FROM food_history.recipe r" +
                      " JOIN food_history.course c" +
                      " ON r.id = c.recipe_id" +
-                     " WHERE c.text in (@courses)" +
+                     " WHERE c.text in (" + queryParamList.GetQueryString() + ")" +
                      " GROUP BY r.id" +
                      " HAVING COUNT(DISTINCT c.text) = @coursesLength";
 
-        List<NpgsqlParameter> parameters = new List<NpgsqlParameter>()
-        {
-            new NpgsqlParameter("@courses", courses),
-            new NpgsqlParameter("@coursesLength", courses.Count())
-        };
+        List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
+
+        queryParamList.PopulateParamList(parameters);
+        parameters.Add(new NpgsqlParameter("@coursesLength", courses.Count()));
 
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
 
     public List<Recipe> GetForCuisines(List<string> cuisines)
     {
+        QueryParamList<string> queryParamList = new QueryParamList<string>("cusine", cuisines);
+
         string sql = " SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source" +
                      " FROM food_history.recipe r" +
                      " JOIN food_history.cuisine c" +
                      " ON r.id = c.recipe_id" +
-                     " WHERE c.text IN (" + string.Join(",", Enumerable.Range(0, cuisines.Count).Select(i => $"@cuisine{i}")) + ")" +
+                     " WHERE c.text IN (" + queryParamList.GetQueryString() + ")" +
                      " GROUP BY r.id" +
                      " HAVING COUNT(DISTINCT c.text) = @cuisinesLength";
 
         List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
-        for (int i = 0; i < cuisines.Count; i++)
-        {
-            parameters.Add(new NpgsqlParameter($"@cuisine{i}", cuisines[i]));
-        }
+        queryParamList.PopulateParamList(parameters);
         parameters.Add(new NpgsqlParameter("@cuisinesLength", cuisines.Count));
 
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
 
     
-    public List<Recipe> GetForTags(List<string> tags) {
+    public List<Recipe> GetForTags(List<string> tags)
+    {
+        QueryParamList<string> queryParamList = new QueryParamList<string>("tag", tags);
+
         string sql = " SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source" +
                      " FROM food_history.recipe r" +
                      " JOIN food_history.tag t" +
                      " ON r.id = t.recipe_id" +
-                     " WHERE t.text in (@tags)" +
+                     " WHERE t.text in (" + queryParamList.GetQueryString() + ")" +
                      " GROUP BY r.id" +
                      " HAVING COUNT(DISTINCT t.text) = @tagLength";
 
-        List<NpgsqlParameter> parameters = new List<NpgsqlParameter>()
-        {
-            new NpgsqlParameter("@tags", tags),
-            new NpgsqlParameter("@tagLength", tags.Count())
-        };
+        List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
+        queryParamList.PopulateParamList(parameters);
+        parameters.Add(new NpgsqlParameter("@tagLength", tags.Count()));
 
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
@@ -119,7 +120,7 @@ public class RecipeDao : IRecipeDao
             new NpgsqlParameter("@name", recipe.Name),
             new NpgsqlParameter("@servingAmount", recipe.ServingAmount),
             new NpgsqlParameter("@servingName", recipe.ServingName),
-            new NpgsqlParameter("@source", recipe.RecipeSourceUrl),
+            new NpgsqlParameter("@source", recipe.RecipeSourceUrl == null ? DBNull.Value : recipe.RecipeSourceUrl.ToString()),
             new NpgsqlParameter("@recipeId", recipe.Id)
         };
 
