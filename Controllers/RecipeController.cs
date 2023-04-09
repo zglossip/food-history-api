@@ -20,7 +20,7 @@ public class RecipeController : ControllerBase {
 
     [HttpGet("{id}")]
     public ActionResult<Recipe> Get(int id) {
-        Recipe recipe = _recipeService.Get(id);
+        Recipe? recipe = _recipeService.Get(id);
 
         if(recipe == null) {
             return NotFound();
