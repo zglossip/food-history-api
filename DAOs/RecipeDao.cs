@@ -100,7 +100,7 @@ public class RecipeDao : IRecipeDao
             new NpgsqlParameter("@name", recipe.Name),
             new NpgsqlParameter("@servingAmount", recipe.ServingAmount),
             new NpgsqlParameter("@servingName", recipe.ServingName),
-            new NpgsqlParameter("@source", recipe.RecipeSourceUrl == null ? null : recipe.RecipeSourceUrl.ToString())
+            new NpgsqlParameter("@source", recipe.RecipeSourceUrl == null ? DBNull.Value : recipe.RecipeSourceUrl.ToString())
         };
 
         return DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
