@@ -3,7 +3,7 @@ using food_history_api.Models;
 namespace food_history_api.DAOs.Interfaces;
 
 public interface IRecipeDao {
-    public Recipe Get(int id);
+    public Recipe? Get(int id);
 
     public List<Recipe> GetAll();
 

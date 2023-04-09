@@ -35,7 +35,7 @@ public class DaoUtil
         _connect(connectionString, sql, parameters);
     }
 
-    private static void _connect(string connectionString, string sql, List<NpgsqlParameter>? parameters, Action<NpgsqlDataReader> mapperAction = null) {
+    private static void _connect(string connectionString, string sql, List<NpgsqlParameter>? parameters, Action<NpgsqlDataReader>? mapperAction = null) {
         using(NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
             NpgsqlCommand command = new NpgsqlCommand(sql, connection);
 

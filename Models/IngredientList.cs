@@ -8,7 +8,11 @@ public class IngredientList {
     public List<Ingredient> Ingredients {get; set;}
 
     //Only for use by deserialization
-    public IngredientList(){}
+    public IngredientList()
+    {
+        this.RecipeId = -1;
+        this.Ingredients = new List<Ingredient>();
+    }
 
     public IngredientList(int recipeId, List<Ingredient> ingredients) {
         this.RecipeId = recipeId;

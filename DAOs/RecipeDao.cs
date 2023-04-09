@@ -16,7 +16,7 @@ public class RecipeDao : IRecipeDao
         _databaseConnectionSupplier = databaseConnectionSupplier;
     }
 
-    public Recipe Get(int id)
+    public Recipe? Get(int id)
     {
         string sql = " SELECT id, name, serving_amount, serving_name, source" +
                      " FROM food_history.recipe" +
@@ -100,7 +100,7 @@ public class RecipeDao : IRecipeDao
             new NpgsqlParameter("@name", recipe.Name),
             new NpgsqlParameter("@servingAmount", recipe.ServingAmount),
             new NpgsqlParameter("@servingName", recipe.ServingName),
-            new NpgsqlParameter("@source", recipe.RecipeSourceUrl.ToString())
+            new NpgsqlParameter("@source", recipe.RecipeSourceUrl == null ? null : recipe.RecipeSourceUrl.ToString())
         };
 
         return DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);

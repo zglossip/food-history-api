@@ -8,9 +8,14 @@ public class InstructionList {
     public List<string> Instructions {get; set;}
 
     //Only for use by deserialization
-    public InstructionList(){}
+    public InstructionList()
+    {
+        this.RecipeId = -1;
+        this.Instructions = new List<string>();
+    }
 
-    public InstructionList(int recipeId, List<string> instructions){
+    public InstructionList(int recipeId, List<string> instructions)
+    {
         this.RecipeId = recipeId;
         this.Instructions = instructions;
     }

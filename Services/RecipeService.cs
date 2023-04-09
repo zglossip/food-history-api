@@ -18,7 +18,7 @@ public class RecipeService : IRecipeService{
         _tagDao = tagDao;
     }
 
-    public Recipe Get(int id)
+    public Recipe? Get(int id)
     {
         return _getPopulatedRecipe(_recipeDao.Get(id));
     }
@@ -43,7 +43,12 @@ public class RecipeService : IRecipeService{
         return _recipeDao.GetForTags(tags).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
     }
 
-    private Recipe _getPopulatedRecipe(Recipe recipe) {
+    private Recipe _getPopulatedRecipe(Recipe? recipe) 
+    {
+        if(recipe == null || recipe.Id == null)
+        {
+            throw new Exception("Cannot populate null recipe.");
+        }
         Recipe newRecipe = recipe.Clone();
         newRecipe.CourseTypes = _courseDao.Get((int)recipe.Id);
         newRecipe.CuisineTypes = _cuisineDao.Get((int)recipe.Id);
@@ -62,6 +67,10 @@ public class RecipeService : IRecipeService{
 
     public void Update(Recipe recipe)
     {
+        if(recipe == null || recipe.Id == null)
+        {
+            throw new Exception("Cannot populate null recipe.");
+        }
         _recipeDao.Update(recipe);
         _courseDao.Delete((int)recipe.Id);
         _courseDao.Create(recipe.CourseTypes, (int)recipe.Id);

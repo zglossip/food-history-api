@@ -18,8 +18,9 @@ public class DatabaseConnectionSupplier : IDatabaseConnectionSupplier{
 
         NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder();
             builder.Host = config["host"];
-            if(config["port"] != null) {
-                builder.Port = int.Parse(config["port"]);
+            string? port = config["port"];
+            if(port != null) {
+                builder.Port = int.Parse((string)port);
             }
             builder.Database = config["database"];
             builder.Username = config["username"];

@@ -4,10 +4,11 @@ namespace food_history_api.DAOs.Mappers;
 
 public class RecipeMapper : AbstractMapper<Recipe>
 {
-    public RecipeMapper() : base(reader => {
+    public RecipeMapper() : base(reader => 
+    {
         string source = reader.GetString(reader.GetOrdinal("source"));
-        Uri sourceUri = null;
-        if (Uri.TryCreate(source, UriKind.Absolute, out Uri result))
+        Uri? sourceUri = null;
+        if (Uri.TryCreate(source, UriKind.Absolute, out Uri? result))
         {
            sourceUri = result;
         }

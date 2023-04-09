@@ -24,7 +24,15 @@ public class Recipe {
     public string? Instructions {get; set;}
 
     //Only for use by deserialization
-    public Recipe(){}
+    public Recipe()
+    {
+        this.Name = "ERROR";
+        this.CourseTypes = new List<string>();
+        this.CuisineTypes = new List<string>();
+        this.Tags = new List<string>();
+        this.ServingAmount = -1;
+        this.ServingName = "ERROR";
+    }
 
     public Recipe(int Id, string Name, int ServingAmount, string ServingName, Uri? RecipeSourceUrl) {
         this.Id = Id;

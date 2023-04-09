@@ -12,9 +12,16 @@ public class Ingredient {
     public string? Notes {get; set;}
 
     //Only for use by deserialization
-    public Ingredient(){}
+    public Ingredient()
+    {
+        this.RecipeId = -1;
+        this.Name = "ERROR";
+        this.Quantity = -1;
+        this.Uom = "ERROR";
+    }
 
-    public Ingredient(int recipeId, string name, int quantity, string uom, string notes) {
+    public Ingredient(int recipeId, string name, int quantity, string uom, string notes)
+    {
         this.RecipeId = recipeId;
         this.Name = name;
         this.Quantity = quantity;
