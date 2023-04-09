@@ -1,6 +1,7 @@
 using food_history_api.Models;
 using food_history_api.DAOs.Interfaces;
 using food_history_api.Services.Interfaces;
+using food_history_api.Models.Enums;
 
 namespace food_history_api.Services;
 
@@ -82,4 +83,20 @@ public class RecipeService : IRecipeService{
 
     public void Delete(int id) => _recipeDao.Delete(id);
 
+    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse)
+    {
+        List<Recipe> recipes = _recipeDao.Get(courses, cuisines, tags, sortColumn).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
+
+        switch(sortColumn)
+        {
+            case RecipeColumn.NAME:
+                recipes.Sort((x,y) => (reverse != null && reverse.Value ? -1 : 1) * x.Name.CompareTo(y.Name));
+                break;
+            default:
+                recipes.Sort((x,y) => (reverse != null && reverse.Value ? -1 : 1) * (x.Id < y.Id ? -1 : x.Id == y.Id ? 0 : 1));
+                break;
+        }
+
+        return recipes;
+    }
 }

@@ -1,4 +1,5 @@
 using food_history_api.Models;
+using food_history_api.Models.Enums;
 using food_history_api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,13 +32,13 @@ public class RecipeController : ControllerBase {
         return recipe;
     }
 
-    [HttpGet]
-    public ActionResult<List<Recipe>> GetAll()
-    {
-        List<Recipe> recipes =_recipeService.GetAll();
-        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
-        return recipes;
-    }
+    // [HttpGet]
+    // public ActionResult<List<Recipe>> GetAll()
+    // {
+    //     List<Recipe> recipes =_recipeService.GetAll();
+    //     recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
+    //     return recipes;
+    // }
 
     [HttpGet("courses")]
     public ActionResult<List<Recipe>> GetForCourses([FromQuery(Name = "course")] List<string> courses)
@@ -60,6 +61,25 @@ public class RecipeController : ControllerBase {
     {
         
         List<Recipe> recipes = _recipeService.GetForTags(tags);
+        recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
+        return recipes;
+    }
+
+    [HttpGet]
+    public ActionResult<List<Recipe>> Get([FromQuery(Name = "course")] List<string> courses, [FromQuery(Name = "cuisine")] List<string> cuisines, [FromQuery(Name = "tag")] List<string> tags, [FromQuery(Name = "sort")] string? sort, [FromQuery(Name = "reverse")] bool? reverse)
+    {
+        RecipeColumn? sortColumn = null;
+
+        if(sort == "id")
+        {
+            sortColumn = RecipeColumn.ID;
+        }
+        else if (sort == "name")
+        {
+            sortColumn = RecipeColumn.NAME;
+        }
+
+        List<Recipe> recipes = _recipeService.Get(courses, cuisines, tags, sortColumn, reverse);
         recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
         return recipes;
     }
