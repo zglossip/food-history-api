@@ -37,6 +37,7 @@ Fetches a list of recipes based on optional query params. Default returns all re
 Fetches a recipe based on its unique ID
 
 *Path Param*: The recipe ID
+
 *Response*: Recipe
 
 **`GET /recipe/{id}/ingredients`**
@@ -44,6 +45,7 @@ Fetches a recipe based on its unique ID
 Fetches a list of ingredients for a recipe
 
 *Path Param*: The recipe ID
+
 *Response*: IngredientList
 
 **`GET /recipe/{id}/instructions`**
@@ -51,6 +53,7 @@ Fetches a list of ingredients for a recipe
 Fetches a list of instructions for a recipe
 
 *Path Param*: The recipe ID
+
 *Response*: InstructionList
 
 **`POST /recipe`**
@@ -58,6 +61,7 @@ Fetches a list of instructions for a recipe
 Creates a new recipe. Returns the same recipe with generated ID
 
 *Request*: Recipe
+
 *Response*: Recipe
 
 **`PUT /recipe/{id}`**
@@ -65,6 +69,7 @@ Creates a new recipe. Returns the same recipe with generated ID
 Saves an existing recipe
 
 *Path Param*: The recipe ID
+
 *Request*: Recipe
 
 **`PUT /recipe/{id}/ingredients`**
@@ -72,6 +77,7 @@ Saves an existing recipe
 Saves a recipe's ingredients
 
 *Path Param*: The recipe ID
+
 *Request*: IngredientList
 
 **`PUT /recipe/{id}/instructions`**
@@ -79,6 +85,7 @@ Saves a recipe's ingredients
 Saves a recipe's instructions
 
 *Path Param*: The recipe ID
+
 *Request*: InstructionList
 
 **`DELETE /recipe/{id}`**
