@@ -12,9 +12,82 @@ NOTE: In order to run this locally, you will need a file named `connectionsettin
 
 Eventually, a database with this setup may be publically avaliable, but I don't currently have the resources to host it.
 
-## API
+# API
 
-### Models
+All endpoints are in application/json. The model objects are listed below the endpoints.
+
+## Endpoints
+
+**`GET /recipe`**
+
+Fetches a list of recipes based on optional query params. Default returns all recipes.
+
+*Query Params*
+
+* `course` (string): fetches only recipes that have this course. Can have multiple courses
+* `cuisine` (string): fetches only recipes that have this cuisine. Can have multiple cuisines
+* `tag` (string): fetches only recipes that have thist tag. Can have multiple tags
+* `sort` (string): property to sort the recipes on (options are `id` and `name`. Default `id`)
+* `reverse` (boolean): sets whether the sorting should be reversed. Default false
+
+*Response*: \[Recipe\]
+
+**`GET /recipe/{id}`**
+
+Fetches a recipe based on its unique ID
+
+*Path Param*: The recipe ID
+*Response*: Recipe
+
+**`GET /recipe/{id}/ingredients`**
+
+Fetches a list of ingredients for a recipe
+
+*Path Param*: The recipe ID
+*Response*: IngredientList
+
+**`GET /recipe/{id}/instructions`**
+
+Fetches a list of instructions for a recipe
+
+*Path Param*: The recipe ID
+*Response*: InstructionList
+
+**`POST /recipe`**
+
+Creates a new recipe. Returns the same recipe with generated ID
+
+*Request*: Recipe
+*Response*: Recipe
+
+**`PUT /recipe/{id}`**
+
+Saves an existing recipe
+
+*Path Param*: The recipe ID
+*Request*: Recipe
+
+**`PUT /recipe/{id}/ingredients`**
+
+Saves a recipe's ingredients
+
+*Path Param*: The recipe ID
+*Request*: IngredientList
+
+**`PUT /recipe/{id}/instructions`**
+
+Saves a recipe's instructions
+
+*Path Param*: The recipe ID
+*Request*: InstructionList
+
+**`DELETE /recipe/{id}`**
+
+Deletes a recipe
+
+*Path Param*: The recipe ID
+
+## Models
 
 **Recipe**
 
@@ -73,11 +146,21 @@ Eventually, a database with this setup may be publically avaliable, but I don't 
 | --- | --- |
 | `name` | The name of the ingredient |
 | `quantity` | The number of units for the ingredient |
-| `uom` | The name of the unit of measurement (UOM) for the ingredient (i.e. c, tbs, ml)
+| `uom` | The name of the unit of measurement (UOM) for the ingredient (i.e. c, tbs, ml) |
 | `notes` | Any notes applied to the ingredient |
 
-### Endpoints
+**InstructionList**
 
-#### `GET /recipe/{id}`
+```JSON
+{
+  "recipeId": 0,
+  "recipe": "string",
+  "instructions": ["string"]
+}
+```
 
-Response: Recipe
+| Property | Description |
+| --- | --- |
+| `recipeId` | The unique ID of the recipe the ingredient list belongs to |
+| `recipe` | The API link to the recipe the ingredient list belongs to |
+| `ingredients` | The ordered list of instructions for the recipe |
