@@ -2,7 +2,7 @@ CREATE TABLE food_history.ingredient
 (
     name character varying NOT NULL,
     uom character varying,
-    quantity integer NOT NULL,
+    quantity decimal(10, 3) NOT NULL,
     notes character varying(200),
     recipe_id integer NOT NULL,
     CONSTRAINT "ingredient_pkey" PRIMARY KEY (recipe_id, name),
