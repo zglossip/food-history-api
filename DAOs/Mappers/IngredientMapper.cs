@@ -20,7 +20,7 @@ public class IngredientMapper : AbstractMapper<Ingredient>
 
         return new Ingredient(
             reader.GetString(reader.GetOrdinal("name")),
-            reader.GetInt32(reader.GetOrdinal("quantity")),
+            reader.GetDouble(reader.GetOrdinal("quantity")),
             uom,
             notes
         );

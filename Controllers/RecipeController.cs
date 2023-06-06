@@ -56,6 +56,7 @@ public class RecipeController : ControllerBase {
     {
         int id = _recipeService.Create(recipe);
         recipe.Id = id;
+        FillOutRecipeLinks(recipe);
         return CreatedAtAction(nameof(Get), new { id = id }, recipe);
     }
 
