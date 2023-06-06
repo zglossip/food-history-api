@@ -5,7 +5,8 @@ NOTE: In order to run this locally, you will need a file named `connectionsettin
 
 | Property | Description |
 | --- | --- |
-| `datasource` | The URL of the data source |
+| `host` | The host of the data source |
+| `port` | The port of the data source |
 | `database` | The name of the database containing the schema |
 | `username` | The username to access the database |
 | `password` | The password to access the database |
