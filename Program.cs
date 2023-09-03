@@ -31,6 +31,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.Use(async (context, next) =>
+    {
+        context.Request.PathBase = new PathString("/fhapi");
+        await next();
+    });
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
