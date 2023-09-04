@@ -26,17 +26,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Add CORS policy for frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendCorsPolicy", builder =>
+    {
+        //TODO: Make this eviornment specific ESPECIALLY BEFORE DEPLOY
+        builder.WithOrigins("http://localhost:8080")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.Use(async (context, next) =>
-    {
-        context.Request.PathBase = new PathString("/fhapi");
-        await next();
-    });
-
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -44,6 +50,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("FrontendCorsPolicy");
 
 app.MapControllers();
 
