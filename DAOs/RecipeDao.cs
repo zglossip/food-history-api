@@ -27,7 +27,7 @@ public class RecipeDao : IRecipeDao
         return DaoUtil.Query(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", id)});
     }
 
-    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn)
+    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, string? name)
     {
         QueryParamList<string> courseQueryParamList = new QueryParamList<string>("course", courses);
         QueryParamList<string> cuisineQueryParamList = new QueryParamList<string>("cuisine", cuisines);
@@ -65,7 +65,8 @@ public class RecipeDao : IRecipeDao
                      "  AND (@tagLength = 0 OR (SELECT COUNT(*) AS tagCount " +
                      "        FROM food_history.tag " +
                      "        WHERE text IN (" + tagQuery + ") " +
-                     "          AND recipe_id = r.id) = @tagLength)";
+                     "          AND recipe_id = r.id) = @tagLength)" +
+                     "  AND @name IS NULL OR UPPER(r.name) LIKE UPPER(@name)";
 
         List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
         courseQueryParamList.PopulateParamList(parameters);
@@ -74,6 +75,7 @@ public class RecipeDao : IRecipeDao
         parameters.Add(new NpgsqlParameter("@courseLength", courses.Count));
         parameters.Add(new NpgsqlParameter("@cuisineLength", cuisines.Count));
         parameters.Add(new NpgsqlParameter("@tagLength", tags.Count));
+        parameters.Add(new NpgsqlParameter("@name", "%" + name + "%"));
 
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }

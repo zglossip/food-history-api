@@ -24,9 +24,9 @@ public class RecipeService : IRecipeService{
         return _getPopulatedRecipe(_recipeDao.Get(id));
     }
 
-    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse)
+    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name)
     {
-        List<Recipe> recipes = _recipeDao.Get(courses, cuisines, tags, sortColumn).Select(recipe => _getPopulatedRecipe(recipe)).ToList();
+        List<Recipe> recipes = _recipeDao.Get(courses, cuisines, tags, sortColumn, name).Select(_getPopulatedRecipe).ToList();
 
         switch(sortColumn)
         {

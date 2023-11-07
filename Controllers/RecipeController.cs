@@ -33,7 +33,7 @@ public class RecipeController : ControllerBase {
     }
 
     [HttpGet]
-    public ActionResult<List<Recipe>> Get([FromQuery(Name = "course")] List<string> courses, [FromQuery(Name = "cuisine")] List<string> cuisines, [FromQuery(Name = "tag")] List<string> tags, [FromQuery(Name = "sort")] string? sort, [FromQuery(Name = "reverse")] bool? reverse)
+    public ActionResult<List<Recipe>> Get([FromQuery(Name = "course")] List<string> courses, [FromQuery(Name = "cuisine")] List<string> cuisines, [FromQuery(Name = "tag")] List<string> tags, [FromQuery(Name = "sort")] string? sort, [FromQuery(Name = "reverse")] bool? reverse, [FromQuery(Name = "name")] string? name)
     {
         RecipeColumn? sortColumn = null;
 
@@ -46,7 +46,7 @@ public class RecipeController : ControllerBase {
             sortColumn = RecipeColumn.NAME;
         }
 
-        List<Recipe> recipes = _recipeService.Get(courses, cuisines, tags, sortColumn, reverse);
+        List<Recipe> recipes = _recipeService.Get(courses, cuisines, tags, sortColumn, reverse, name);
         recipes.ForEach(recipe => FillOutRecipeLinks(recipe));
         return recipes;
     }
