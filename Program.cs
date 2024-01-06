@@ -27,16 +27,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Add CORS policy for frontend
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("FrontendCorsPolicy", builder =>
-    {
-        //TODO: Make this eviornment specific ESPECIALLY BEFORE DEPLOY
-        builder.WithOrigins("http://localhost:8080")
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("FrontendCorsPolicy", builder =>
+//     {
+//         //TODO: Make this eviornment specific ESPECIALLY BEFORE DEPLOY
+//         builder.WithOrigins("http://localhost:8081")
+//                .AllowAnyMethod()
+//                .AllowAnyHeader();
+//     });
+// });
 
 var app = builder.Build();
 

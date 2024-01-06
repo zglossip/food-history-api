@@ -12,4 +12,4 @@ RUN dotnet restore
 COPY . ./
 
 # Set the entry point to use dotnet watch
-ENTRYPOINT ["dotnet", "watch", "run"]
+ENTRYPOINT ["dotnet", "watch", "run", "--urls=http://+:8080/"]
