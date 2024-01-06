@@ -6,9 +6,27 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - "8000:8080"
+      - "8080:8080"
     volumes:
       - .:/app
       - ~/.nuget/packages:/root/.nuget/packages
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development  
+      - ASPNETCORE_ENVIRONMENT=Development
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+  frontend:
+    build:
+      context: ../food-history-app
+    ports:
+      - "8081:8081"
+    volumes:
+      - ../food-history-app:/app
+      - /app/node_modules
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M

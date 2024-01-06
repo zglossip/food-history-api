@@ -8,8 +8,7 @@ WORKDIR /app
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copy the project files into the container
-COPY . ./
+EXPOSE 8080
 
 # Set the entry point to use dotnet watch
 ENTRYPOINT ["dotnet", "watch", "run", "--urls=http://+:8080/"]
