@@ -26,17 +26,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Add CORS policy for frontend
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("FrontendCorsPolicy", builder =>
-//     {
-//         //TODO: Make this eviornment specific ESPECIALLY BEFORE DEPLOY
-//         builder.WithOrigins("http://localhost:8081")
-//                .AllowAnyMethod()
-//                .AllowAnyHeader();
-//     });
-// });
+// Add CORS policy for frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendCorsPolicy", builder =>
+    {
+        //TODO: Make this eviornment specific ESPECIALLY BEFORE DEPLOY
+        builder.WithOrigins("http://localhost:8081")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
@@ -47,7 +47,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// TODO: Look more into this later
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
