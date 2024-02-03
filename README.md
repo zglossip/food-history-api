@@ -1,7 +1,31 @@
-# food-history-api (WIP)
+# Food History API 
+Version 0.1.0
+
 A REST API that will be used to service an upcoming recipe catalog/food diary application
 
-NOTE: In order to run this locally, you will need a file named `connectionsettings.json` in the root directory. This should contain several properties to connect to a database with a schema set up by the provided SQL queries in `/SQLTableDefinitions`.
+## Frontend
+
+This API serves as the backend to the [Food History mobile application](https://github.com/zglossip/food-history-app)
+
+To run the full application, you will need to clone and run both the backend and the frontend
+
+In a future release, there may also be a webapp frontend
+
+### Note about the Dockerfiles
+
+There is a couple Dockerfiles included with this repository. This is primarily used by a Docker Compose config in the frontend repo.
+
+## Instructions
+
+### Live Development
+
+* Ensure you have [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) installed
+* In the terminal, run `dotnet run watch --urls=http://+:8080/`
+* Navigate to `http://localhost:8080/swagger/index.html` to browse the API
+
+### connectionsettings.json
+
+In order to run this locally, you will need a file named `connectionsettings.json` in the root directory. This should contain several properties to connect to a database with a schema set up by the provided SQL queries in `/SQLTableDefinitions`.
 
 | Property | Description |
 | --- | --- |
@@ -13,87 +37,94 @@ NOTE: In order to run this locally, you will need a file named `connectionsettin
 
 Eventually, a database with this setup may be publically avaliable, but I don't currently have the resources to host it.
 
-# API
+## API
 
 All endpoints are in application/json. The model objects are listed below the endpoints.
 
-## Endpoints
+### Endpoints
 
-**`GET /recipe`**
+#### GET /recipe
 
 Fetches a list of recipes based on optional query params. Default returns all recipes.
 
-*Query Params*
+- **Query Parameters:**
+  - `course` (string): fetches only recipes that have this course. Can have multiple courses
+  - `cuisine` (string): fetches only recipes that have this cuisine. Can have multiple cuisines
+  - `tag` (string): fetches only recipes that have thist tag. Can have multiple tags
+  - `sort` (string): property to sort the recipes on (options are `id` and `name`. Default `id`)
+  - `reverse` (boolean): sets whether the sorting should be reversed. Default false
+- **Response:**
+  - \[Recipe\]
 
-* `course` (string): fetches only recipes that have this course. Can have multiple courses
-* `cuisine` (string): fetches only recipes that have this cuisine. Can have multiple cuisines
-* `tag` (string): fetches only recipes that have thist tag. Can have multiple tags
-* `sort` (string): property to sort the recipes on (options are `id` and `name`. Default `id`)
-* `reverse` (boolean): sets whether the sorting should be reversed. Default false
-
-*Response*: \[Recipe\]
-
-**`GET /recipe/{id}`**
+#### GET /recipe/{id}
 
 Fetches a recipe based on its unique ID
 
-*Path Param*: The recipe ID
+- **Path Parameters:**
+  - `id` (number): the recipe ID
+- **Response:**
+  - Recipe
 
-*Response*: Recipe
-
-**`GET /recipe/{id}/ingredients`**
+#### GET /recipe/{id}/ingredients
 
 Fetches a list of ingredients for a recipe
 
-*Path Param*: The recipe ID
+- **Path Parameters:**
+  - `id` (number): the recipe ID
+- **Response:**
+  - IngredientList
 
-*Response*: IngredientList
-
-**`GET /recipe/{id}/instructions`**
+#### GET /recipe/{id}/instructions
 
 Fetches a list of instructions for a recipe
 
-*Path Param*: The recipe ID
+- **Path Parameters:**
+  - `id` (number): the recipe ID
+- **Response:**
+  - InstructionList
 
-*Response*: InstructionList
-
-**`POST /recipe`**
+#### POST /recipe
 
 Creates a new recipe. Returns the same recipe with generated ID
 
-*Request*: Recipe
+- **Request:**
+  - Recipe
+- **Response:**
+  - Recipe
 
-*Response*: Recipe
-
-**`PUT /recipe/{id}`**
+#### PUT /recipe/{id}
 
 Saves an existing recipe
 
-*Path Param*: The recipe ID
+- **Path Parameters:**
+  - `id` (number): the recipe ID
+- **Request:**
+  - Recipe
 
-*Request*: Recipe
-
-**`PUT /recipe/{id}/ingredients`**
+#### PUT /recipe/{id}/ingredients
 
 Saves a recipe's ingredients
 
-*Path Param*: The recipe ID
+- **Path Parameters:**
+  - `id` (number): the recipe ID
+- **Request:**
+  - IngredientList
 
-*Request*: IngredientList
-
-**`PUT /recipe/{id}/instructions`**
+#### PUT /recipe/{id}/instructions
 
 Saves a recipe's instructions
 
-*Path Param*: The recipe ID
+- **Path Parameters:**
+  - `id` (number): the recipe ID
+- **Request:**
+  - InstructionList
 
-*Request*: InstructionList
-
-**`DELETE /recipe/{id}`**
+#### DELETE /recipe/{id}
 
 Deletes a recipe
 
-*Path Param*: The recipe ID
+- **Path Parameters:**
+  - `id` (number): the recipe ID
 
 ## Models
 
@@ -172,3 +203,8 @@ Deletes a recipe
 | `recipeId` | The unique ID of the recipe the ingredient list belongs to |
 | `recipe` | The API link to the recipe the ingredient list belongs to |
 | `ingredients` | The ordered list of instructions for the recipe |
+
+## Release History
+
+### 0.1.0
+This is the initial release of the application. This contains a basic CRUD api for recipes. Meant as a starting point for the application
