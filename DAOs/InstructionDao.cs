@@ -6,7 +6,8 @@ using Npgsql;
 
 namespace food_history_api.DAOs;
 
-public class InstructionDao : IInstructionDao {
+public class InstructionDao : IInstructionDao
+{
 
     private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier;
 

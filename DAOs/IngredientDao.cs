@@ -21,7 +21,8 @@ public class IngredientDao : IIngredientDao
     {
         string sql = "SELECT NAME, QUANTITY, UOM, NOTES " +
                      "FROM food_history.INGREDIENT " +
-                     "WHERE RECIPE_ID = @recipeId";
+                     "WHERE RECIPE_ID = @recipeId" +
+                     "ORDER BY POSITION ASC";
 
         return DaoUtil.QueryForList( _databaseConnectionSupplier.GetConnectionString(), 
                       sql, 
@@ -41,15 +42,17 @@ public class IngredientDao : IIngredientDao
 
     public void Create(List<Ingredient> ingredientList, int recipeId)
     {
-        string sql = "INSERT INTO food_history.INGREDIENT (RECIPE_ID, NAME, QUANTITY, UOM, NOTES) " +
-                     "VALUES(@recipeId, @name, @quantity, @uom, @notes)";
+        string sql = "INSERT INTO food_history.INGREDIENT (RECIPE_ID, POSITION, NAME, QUANTITY, UOM, NOTES) " +
+                     "VALUES(@recipeId, @position, @name, @quantity, @uom, @notes)";
 
-
+        int position = 0;
+        
         ingredientList.ForEach(ingredient => 
         {
             List<NpgsqlParameter> sqlParameters = new List<NpgsqlParameter>
             {
                 new NpgsqlParameter("@recipeId", recipeId),
+                new NpgsqlParameter("@position", position++)
                 new NpgsqlParameter("@name", ingredient.Name),
                 new NpgsqlParameter("@quantity", ingredient.Quantity),
                 new NpgsqlParameter("@uom", ingredient.Uom == null ? DBNull.Value : ingredient.Uom),

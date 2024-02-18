@@ -1,6 +1,7 @@
 CREATE TABLE food_history.ingredient
 (
     recipe_id smallint NOT NULL,
+    "position" smallint NOT NULL,
     name character varying(20) NOT NULL,
     uom character varying(10),
     quantity numeric(10, 3) NOT NULL,
