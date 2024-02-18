@@ -21,7 +21,7 @@ public class IngredientDao : IIngredientDao
     {
         string sql = "SELECT NAME, QUANTITY, UOM, NOTES " +
                      "FROM food_history.INGREDIENT " +
-                     "WHERE RECIPE_ID = @recipeId" +
+                     "WHERE RECIPE_ID = @recipeId " +
                      "ORDER BY POSITION ASC";
 
         return DaoUtil.QueryForList( _databaseConnectionSupplier.GetConnectionString(), 
@@ -52,7 +52,7 @@ public class IngredientDao : IIngredientDao
             List<NpgsqlParameter> sqlParameters = new List<NpgsqlParameter>
             {
                 new NpgsqlParameter("@recipeId", recipeId),
-                new NpgsqlParameter("@position", position++)
+                new NpgsqlParameter("@position", position++),
                 new NpgsqlParameter("@name", ingredient.Name),
                 new NpgsqlParameter("@quantity", ingredient.Quantity),
                 new NpgsqlParameter("@uom", ingredient.Uom == null ? DBNull.Value : ingredient.Uom),
