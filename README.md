@@ -19,7 +19,7 @@ There is a couple Dockerfiles included with this repository. This is primarily u
 
 ### Live Development
 
-* Ensure you have [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) installed
+* Ensure you have the [.NET 8.0 SDK](https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian?tabs=dotnet8) installed
 * In the terminal, run `dotnet run watch --urls=http://+:8080/`
 * Navigate to `http://localhost:8080/swagger/index.html` to browse the API
 
