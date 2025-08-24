@@ -2,8 +2,6 @@ namespace food_history_api.Models;
 
 public class Recipe {
     public int? Id {get; set;}
-
-    public string? Link {get; set;}
     
     public string Name {get; set;}
 
@@ -18,10 +16,6 @@ public class Recipe {
     public string ServingName {get; set;}
 
     public Uri? RecipeSourceUrl {get; set;}
-
-    public string? Ingredients {get; set;}
-
-    public string? Instructions {get; set;}
 
     //Only for use by deserialization
     public Recipe()
@@ -48,7 +42,6 @@ public class Recipe {
     public Recipe(Recipe recipe)
     {
         Id = recipe.Id;
-        Link = recipe.Link;
         Name = recipe.Name;
         CourseTypes = recipe.CourseTypes;
         CuisineTypes = recipe.CuisineTypes;
@@ -56,8 +49,6 @@ public class Recipe {
         ServingAmount = recipe.ServingAmount;
         ServingName = recipe.ServingName;
         RecipeSourceUrl = recipe.RecipeSourceUrl;
-        Ingredients = recipe.Ingredients;
-        Instructions = recipe.Instructions;
     }
 
     public Recipe Clone()
