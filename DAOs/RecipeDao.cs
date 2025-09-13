@@ -20,7 +20,7 @@ public class RecipeDao : IRecipeDao
 
     public Recipe? Get(int id)
     {
-        string sql = " SELECT id, name, serving_amount, serving_name, source" +
+        string sql = " SELECT id, name, serving_amount, serving_name, source, uploaded" +
                      " FROM food_history.recipe" +
                      " WHERE id = @recipeId";
 
@@ -52,7 +52,7 @@ public class RecipeDao : IRecipeDao
             tagQuery = "''"; // replace empty list with default value
         }
 
-        string sql = "SELECT r.* " +
+        string sql = "SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source, r.uploaded " +
                      "FROM food_history.recipe r " +
                      "WHERE (@courseLength = 0 OR (SELECT COUNT(*) AS courseCount " +
                      "        FROM food_history.course " +

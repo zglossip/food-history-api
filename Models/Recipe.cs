@@ -17,6 +17,8 @@ public class Recipe {
 
     public Uri? RecipeSourceUrl {get; set;}
 
+    public DateTime? Uploaded { get; set; }
+
     //Only for use by deserialization
     public Recipe()
     {
@@ -28,15 +30,17 @@ public class Recipe {
         this.ServingName = "ERROR";
     }
 
-    public Recipe(int Id, string Name, int ServingAmount, string ServingName, Uri? RecipeSourceUrl) {
+    public Recipe(int Id, string Name, int ServingAmount, string ServingName, Uri? RecipeSourceUrl, DateTime Uploaded)
+    {
         this.Id = Id;
         this.Name = Name;
-        this.CourseTypes = new List<string>();
-        this.CuisineTypes = new List<string>();
-        this.Tags = new List<String>();
+        this.CourseTypes = [];
+        this.CuisineTypes = [];
+        this.Tags = [];
         this.ServingAmount = ServingAmount;
         this.ServingName = ServingName;
         this.RecipeSourceUrl = RecipeSourceUrl;
+        this.Uploaded = Uploaded;
     }
 
     public Recipe(Recipe recipe)
@@ -49,6 +53,7 @@ public class Recipe {
         ServingAmount = recipe.ServingAmount;
         ServingName = recipe.ServingName;
         RecipeSourceUrl = recipe.RecipeSourceUrl;
+        Uploaded = recipe.Uploaded;
     }
 
     public Recipe Clone()

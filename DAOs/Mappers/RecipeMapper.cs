@@ -21,7 +21,8 @@ public class RecipeMapper : AbstractMapper<Recipe>
             reader.GetString(reader.GetOrdinal("name")),
             reader.GetInt32(reader.GetOrdinal("serving_amount")),
             reader.GetString(reader.GetOrdinal("serving_name")),
-            sourceUri
+            sourceUri,
+            reader.GetDateTime(reader.GetOrdinal("uploaded"))
         );
     }){}
 }
