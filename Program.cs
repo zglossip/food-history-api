@@ -50,9 +50,9 @@ if (app.Environment.IsDevelopment())
 // TODO: Look more into this later
 // app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseCors("FrontendCorsPolicy");
+
+app.UseAuthorization();
 
 app.MapControllers();
 
