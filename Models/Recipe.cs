@@ -15,7 +15,7 @@ public class Recipe {
 
     public string ServingName {get; set;}
 
-    public string? RecipeSourceUrl {get; set;}
+    public string? Source {get; set;}
 
     public DateTime? Uploaded { get; set; }
 
@@ -30,7 +30,7 @@ public class Recipe {
         this.ServingName = "ERROR";
     }
 
-    public Recipe(int Id, string Name, int ServingAmount, string ServingName, string? RecipeSourceUrl, DateTime Uploaded)
+    public Recipe(int Id, string Name, int ServingAmount, string ServingName, string? Source, DateTime Uploaded)
     {
         this.Id = Id;
         this.Name = Name;
@@ -39,7 +39,7 @@ public class Recipe {
         this.Tags = [];
         this.ServingAmount = ServingAmount;
         this.ServingName = ServingName;
-        this.RecipeSourceUrl = RecipeSourceUrl;
+        this.Source = Source;
         this.Uploaded = Uploaded;
     }
 
@@ -52,7 +52,7 @@ public class Recipe {
         Tags = recipe.Tags;
         ServingAmount = recipe.ServingAmount;
         ServingName = recipe.ServingName;
-        RecipeSourceUrl = recipe.RecipeSourceUrl;
+        Source = recipe.Source;
         Uploaded = recipe.Uploaded;
     }
 
