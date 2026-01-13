@@ -140,7 +140,7 @@ Deletes a recipe
   "tags": ["string"],
   "servingAmount": 0,
   "servingName": 0,
-  "recipeSourceUrl": "string",
+  "source": "string",
   "ingredients": "string",
   "instructions": "string"
 }
@@ -156,7 +156,7 @@ Deletes a recipe
 | `tags` | A list of string representing a list of miscellanious tags saved to the recipe |
 | `servingAmount` | The number of servings the recipe makes |
 | `servingName` | The unit of measurement for a serving of the recipe (i.e. serving, slice, sandwich) |
-| `recipeSourceUrl` | A link to the external recipe site, if there is one |
+| `source` | A link to the external recipe site, if there is one |
 | `ingredients` | The API link for the recipe's ingredients |
 | `instructions` | The API link for the recipe's instructions |
 
