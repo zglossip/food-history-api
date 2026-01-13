@@ -15,7 +15,7 @@ public class Recipe {
 
     public string ServingName {get; set;}
 
-    public Uri? RecipeSourceUrl {get; set;}
+    public string? RecipeSourceUrl {get; set;}
 
     public DateTime? Uploaded { get; set; }
 
@@ -30,7 +30,7 @@ public class Recipe {
         this.ServingName = "ERROR";
     }
 
-    public Recipe(int Id, string Name, int ServingAmount, string ServingName, Uri? RecipeSourceUrl, DateTime Uploaded)
+    public Recipe(int Id, string Name, int ServingAmount, string ServingName, string? RecipeSourceUrl, DateTime Uploaded)
     {
         this.Id = Id;
         this.Name = Name;
