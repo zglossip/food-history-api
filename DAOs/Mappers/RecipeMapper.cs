@@ -6,14 +6,10 @@ public class RecipeMapper : AbstractMapper<Recipe>
 {
     public RecipeMapper() : base(reader => 
     {
-        Uri? sourceUri = null;
+        string? source = null;
         if (!reader.IsDBNull(reader.GetOrdinal("source")))
         {
-            string source = reader.GetString(reader.GetOrdinal("source"));
-            if (Uri.TryCreate(source, UriKind.Absolute, out Uri? result))
-            {
-                sourceUri = result;
-            }
+            source = reader.GetString(reader.GetOrdinal("source"));
         }
 
         return new Recipe(
@@ -21,7 +17,7 @@ public class RecipeMapper : AbstractMapper<Recipe>
             reader.GetString(reader.GetOrdinal("name")),
             reader.GetInt32(reader.GetOrdinal("serving_amount")),
             reader.GetString(reader.GetOrdinal("serving_name")),
-            sourceUri,
+            source,
             reader.GetDateTime(reader.GetOrdinal("uploaded"))
         );
     }){}
