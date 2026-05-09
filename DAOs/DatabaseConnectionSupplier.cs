@@ -28,7 +28,7 @@ public class DatabaseConnectionSupplier : IDatabaseConnectionSupplier
         builder.Username = config["username"];
         builder.Password = config["password"];
 
-        _logger.LogInformation($"Connecting to database: {builder.ConnectionString}");
+        _logger.LogInformation("Connecting to database host={Host} database={Database}", builder.Host, builder.Database);
 
         _connectionString = builder.ConnectionString;
     }
