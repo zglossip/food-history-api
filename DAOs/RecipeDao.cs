@@ -70,7 +70,10 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
         parameters.Add(new NpgsqlParameter("@courseLength", courses.Count));
         parameters.Add(new NpgsqlParameter("@cuisineLength", cuisines.Count));
         parameters.Add(new NpgsqlParameter("@tagLength", tags.Count));
-        parameters.Add(new NpgsqlParameter("@name", name == null ? (object)DBNull.Value : "%" + name + "%"));
+        parameters.Add(new NpgsqlParameter("@name", NpgsqlTypes.NpgsqlDbType.Text)
+        {
+            Value = name == null ? (object)DBNull.Value : "%" + name + "%"
+        });
 
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
