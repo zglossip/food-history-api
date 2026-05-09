@@ -1,9 +1,10 @@
 namespace food_history_api.Models;
 
-public class IngredientList {
-    public int RecipeId {get; set;}
+public class IngredientList
+{
+    public int RecipeId { get; set; }
 
-    public List<Ingredient> Ingredients {get; set;}
+    public List<Ingredient> Ingredients { get; set; }
 
     //Only for use by deserialization
     public IngredientList()
@@ -12,7 +13,8 @@ public class IngredientList {
         this.Ingredients = new List<Ingredient>();
     }
 
-    public IngredientList(int recipeId, List<Ingredient> ingredients) {
+    public IngredientList(int recipeId, List<Ingredient> ingredients)
+    {
         this.RecipeId = recipeId;
         this.Ingredients = ingredients;
     }

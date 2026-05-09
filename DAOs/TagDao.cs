@@ -6,15 +6,10 @@ using Npgsql;
 
 namespace food_history_api.DAOs;
 
-public class TagDao : ITagDao
+public class TagDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : ITagDao
 {
 
-    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier;
-
-    public TagDao(IDatabaseConnectionSupplier databaseConnectionSupplier)
-    {
-        _databaseConnectionSupplier = databaseConnectionSupplier;
-    }
+    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
     public void Create(List<string> tags, int recipeId)
     {
@@ -22,7 +17,8 @@ public class TagDao : ITagDao
                      " (recipe_id, text)" +
                      " VALUES (@recipeId, @text)";
 
-        tags.ForEach(tag => {
+        tags.ForEach(tag =>
+        {
             List<NpgsqlParameter> parameters = new List<NpgsqlParameter>(){
                 new NpgsqlParameter("@recipeId", recipeId),
                 new NpgsqlParameter("@text", tag)
@@ -37,7 +33,7 @@ public class TagDao : ITagDao
         string sql = " DELETE FROM food_history.tag" +
                      " WHERE recipe_id = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", recipeId)});
+        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
     public List<string> Get(int recipeId)
@@ -46,6 +42,6 @@ public class TagDao : ITagDao
                      " FROM food_history.tag" +
                      " WHERE recipe_id = @recipeId";
 
-        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new TagMapper(), new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", recipeId)});
+        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new TagMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
     }
 }

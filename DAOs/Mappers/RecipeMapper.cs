@@ -4,7 +4,7 @@ namespace food_history_api.DAOs.Mappers;
 
 public class RecipeMapper : AbstractMapper<Recipe>
 {
-    public RecipeMapper() : base(reader => 
+    public RecipeMapper() : base(reader =>
     {
         string? source = null;
         if (!reader.IsDBNull(reader.GetOrdinal("source")))
@@ -20,5 +20,6 @@ public class RecipeMapper : AbstractMapper<Recipe>
             source,
             reader.GetDateTime(reader.GetOrdinal("uploaded"))
         );
-    }){}
+    })
+    { }
 }

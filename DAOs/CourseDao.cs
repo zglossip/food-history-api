@@ -6,15 +6,10 @@ using Npgsql;
 
 namespace food_history_api.DAOs;
 
-public class CourseDao : ICourseDao
+public class CourseDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : ICourseDao
 {
 
-    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier;
-
-    public CourseDao(IDatabaseConnectionSupplier databaseConnectionSupplier)
-    {
-        _databaseConnectionSupplier = databaseConnectionSupplier;
-    }
+    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
     public void Create(List<string> courses, int recipeId)
     {
@@ -22,7 +17,8 @@ public class CourseDao : ICourseDao
                      " (recipe_id, text)" +
                      " VALUES (@recipeId, @text)";
 
-        courses.ForEach(course => {
+        courses.ForEach(course =>
+        {
             List<NpgsqlParameter> parameters = new List<NpgsqlParameter>(){
                 new NpgsqlParameter("@recipeId", recipeId),
                 new NpgsqlParameter("@text", course)
@@ -37,7 +33,7 @@ public class CourseDao : ICourseDao
         string sql = " DELETE FROM food_history.course" +
                      " WHERE recipe_id = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", recipeId)});
+        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
     public List<string> Get(int recipeId)
@@ -46,6 +42,6 @@ public class CourseDao : ICourseDao
                      " FROM food_history.course" +
                      " WHERE recipe_id = @recipeId";
 
-        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new CourseMapper(), new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", recipeId)});
+        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new CourseMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
     }
 }

@@ -5,19 +5,12 @@ using food_history_api.Models.Enums;
 
 namespace food_history_api.Services;
 
-public class RecipeService : IRecipeService{
-
-    private readonly IRecipeDao _recipeDao;
-    private readonly ICourseDao _courseDao;
-    private readonly ICusineDao _cuisineDao;
-    private readonly ITagDao _tagDao;
-
-    public RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICusineDao cusineDao, ITagDao tagDao) {
-        _recipeDao = recipeDao;
-        _courseDao = courseDao;
-        _cuisineDao = cusineDao;
-        _tagDao = tagDao;
-    }
+public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineDao cuisineDao, ITagDao tagDao) : IRecipeService
+{
+    private readonly IRecipeDao _recipeDao = recipeDao;
+    private readonly ICourseDao _courseDao = courseDao;
+    private readonly ICuisineDao _cuisineDao = cuisineDao;
+    private readonly ITagDao _tagDao = tagDao;
 
     public Recipe? Get(int id)
     {
@@ -28,22 +21,22 @@ public class RecipeService : IRecipeService{
     {
         List<Recipe> recipes = _recipeDao.Get(courses, cuisines, tags, sortColumn, name).Select(_getPopulatedRecipe).ToList();
 
-        switch(sortColumn)
+        switch (sortColumn)
         {
             case RecipeColumn.NAME:
-                recipes.Sort((x,y) => (reverse != null && reverse.Value ? -1 : 1) * x.Name.CompareTo(y.Name));
+                recipes.Sort((x, y) => (reverse != null && reverse.Value ? -1 : 1) * x.Name.CompareTo(y.Name));
                 break;
             default:
-                recipes.Sort((x,y) => (reverse != null && reverse.Value ? -1 : 1) * (x.Id < y.Id ? -1 : x.Id == y.Id ? 0 : 1));
+                recipes.Sort((x, y) => (reverse != null && reverse.Value ? -1 : 1) * (x.Id < y.Id ? -1 : x.Id == y.Id ? 0 : 1));
                 break;
         }
 
         return recipes;
     }
 
-    private Recipe _getPopulatedRecipe(Recipe? recipe) 
+    private Recipe _getPopulatedRecipe(Recipe? recipe)
     {
-        if(recipe == null || recipe.Id == null)
+        if (recipe == null || recipe.Id == null)
         {
             throw new Exception("Cannot populate null recipe.");
         }
@@ -65,7 +58,7 @@ public class RecipeService : IRecipeService{
 
     public void Update(Recipe recipe)
     {
-        if(recipe == null || recipe.Id == null)
+        if (recipe == null || recipe.Id == null)
         {
             throw new Exception("Cannot populate null recipe.");
         }

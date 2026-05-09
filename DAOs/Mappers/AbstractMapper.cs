@@ -4,7 +4,7 @@ namespace food_history_api.DAOs.Mappers;
 
 public abstract class AbstractMapper<T>
 {
-    public Func<NpgsqlDataReader, T> MapperFunction {get;}
+    public Func<NpgsqlDataReader, T> MapperFunction { get; }
 
     public AbstractMapper(Func<NpgsqlDataReader, T> mapperFunction)
     {

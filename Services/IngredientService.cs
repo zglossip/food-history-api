@@ -4,17 +4,14 @@ using food_history_api.Services.Interfaces;
 
 namespace food_history_api.Services;
 
-public class IngredientService : IIngredientService {
-
-    private readonly IIngredientDao _ingredientDao;
-
-    public IngredientService(IIngredientDao ingredientDao) {
-        _ingredientDao = ingredientDao;
-    }
+public class IngredientService(IIngredientDao ingredientDao) : IIngredientService
+{
+    private readonly IIngredientDao _ingredientDao = ingredientDao;
 
     public IngredientList Get(int recipeId) => new IngredientList(recipeId, _ingredientDao.Get(recipeId));
 
-    public void Update(IngredientList ingredientList) {
+    public void Update(IngredientList ingredientList)
+    {
         _ingredientDao.Delete(ingredientList.RecipeId);
         _ingredientDao.Create(ingredientList.Ingredients, ingredientList.RecipeId);
     }

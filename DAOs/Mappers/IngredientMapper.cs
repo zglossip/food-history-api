@@ -4,16 +4,17 @@ namespace food_history_api.DAOs.Mappers;
 
 public class IngredientMapper : AbstractMapper<Ingredient>
 {
-    public IngredientMapper() : base(reader => {
+    public IngredientMapper() : base(reader =>
+    {
         string? notes = null;
         string? uom = null;
 
-        if(!reader.IsDBNull(reader.GetOrdinal("notes")))
+        if (!reader.IsDBNull(reader.GetOrdinal("notes")))
         {
             notes = reader.GetString(reader.GetOrdinal("notes"));
         }
 
-        if(!reader.IsDBNull(reader.GetOrdinal("uom")))
+        if (!reader.IsDBNull(reader.GetOrdinal("uom")))
         {
             uom = reader.GetString(reader.GetOrdinal("uom"));
         }
@@ -24,5 +25,6 @@ public class IngredientMapper : AbstractMapper<Ingredient>
             uom,
             notes
         );
-    }){}
+    })
+    { }
 }

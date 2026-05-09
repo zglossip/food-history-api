@@ -7,16 +7,11 @@ using Npgsql;
 
 namespace food_history_api.DAOs;
 
-public class IngredientDao : IIngredientDao
+public class IngredientDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : IIngredientDao
 {
 
-    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier;
+    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
-    public IngredientDao(IDatabaseConnectionSupplier databaseConnectionSupplier)
-    {
-        _databaseConnectionSupplier = databaseConnectionSupplier;
-    }
-    
     public List<Ingredient> Get(int recipeId)
     {
         string sql = "SELECT NAME, QUANTITY, UOM, NOTES " +
@@ -24,10 +19,10 @@ public class IngredientDao : IIngredientDao
                      "WHERE RECIPE_ID = @recipeId " +
                      "ORDER BY POSITION ASC";
 
-        return DaoUtil.QueryForList( _databaseConnectionSupplier.GetConnectionString(), 
-                      sql, 
+        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(),
+                      sql,
                       new IngredientMapper(),
-                      new List<NpgsqlParameter>{new NpgsqlParameter("@recipeId", recipeId)});
+                      new List<NpgsqlParameter> { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
     public void Delete(int recipeId)
@@ -35,9 +30,9 @@ public class IngredientDao : IIngredientDao
         string sql = "DELETE FROM food_history.INGREDIENT " +
                      "WHERE RECIPE_ID = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), 
-                        sql, 
-                        new List<NpgsqlParameter>{new NpgsqlParameter("@recipeId", recipeId)});
+        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(),
+                        sql,
+                        new List<NpgsqlParameter> { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
     public void Create(List<Ingredient> ingredientList, int recipeId)
@@ -46,8 +41,8 @@ public class IngredientDao : IIngredientDao
                      "VALUES(@recipeId, @position, @name, @quantity, @uom, @notes)";
 
         int position = 0;
-        
-        ingredientList.ForEach(ingredient => 
+
+        ingredientList.ForEach(ingredient =>
         {
             List<NpgsqlParameter> sqlParameters = new List<NpgsqlParameter>
             {

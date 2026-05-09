@@ -1,21 +1,22 @@
 namespace food_history_api.Models;
 
-public class Recipe {
-    public int? Id {get; set;}
-    
-    public string Name {get; set;}
+public class Recipe
+{
+    public int? Id { get; set; }
 
-    public List<string> CourseTypes {get; set;}
+    public string Name { get; set; }
 
-    public List<string> CuisineTypes {get; set;}
+    public List<string> CourseTypes { get; set; }
 
-    public List<string> Tags { set; get;}
+    public List<string> CuisineTypes { get; set; }
 
-    public int ServingAmount {get; set;}
+    public List<string> Tags { set; get; }
 
-    public string ServingName {get; set;}
+    public int ServingAmount { get; set; }
 
-    public string? Source {get; set;}
+    public string ServingName { get; set; }
+
+    public string? Source { get; set; }
 
     public DateTime? Uploaded { get; set; }
 

@@ -6,15 +6,10 @@ using Npgsql;
 
 namespace food_history_api.DAOs;
 
-public class CuisineDao : ICusineDao
+public class CuisineDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : ICuisineDao
 {
 
-    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier;
-
-    public CuisineDao(IDatabaseConnectionSupplier databaseConnectionSupplier)
-    {
-        _databaseConnectionSupplier = databaseConnectionSupplier;
-    }
+    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
     public void Create(List<string> cusisines, int recipeId)
     {
@@ -22,7 +17,8 @@ public class CuisineDao : ICusineDao
                      " (recipe_id, text)" +
                      " VALUES (@recipeId, @text)";
 
-        cusisines.ForEach(cuisine => {
+        cusisines.ForEach(cuisine =>
+        {
             List<NpgsqlParameter> parameters = new List<NpgsqlParameter>(){
                 new NpgsqlParameter("@recipeId", recipeId),
                 new NpgsqlParameter("@text", cuisine)
@@ -37,7 +33,7 @@ public class CuisineDao : ICusineDao
         string sql = " DELETE FROM food_history.cuisine" +
                      " WHERE recipe_id = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", recipeId)});
+        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
     public List<string> Get(int recipeId)
@@ -46,6 +42,6 @@ public class CuisineDao : ICusineDao
                      " FROM food_history.cuisine" +
                      " WHERE recipe_id = @recipeId";
 
-        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new CuisineMapper(), new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", recipeId)});
+        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new CuisineMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
     }
 }

@@ -1,13 +1,14 @@
 namespace food_history_api.Models;
 
-public class Ingredient {
-    public string Name {get; set;}
+public class Ingredient
+{
+    public string Name { get; set; }
 
-    public double Quantity {get; set;}
+    public double Quantity { get; set; }
 
-    public string? Uom {get; set;}
+    public string? Uom { get; set; }
 
-    public string? Notes {get; set;}
+    public string? Notes { get; set; }
 
     //Only for use by deserialization
     public Ingredient()

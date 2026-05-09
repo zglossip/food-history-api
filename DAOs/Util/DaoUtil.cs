@@ -11,12 +11,16 @@ public class DaoUtil
     {
         List<T> results = QueryForList(connectionString, sql, mapper, parameters);
 
-        if(results.Count() > 1)
+        if (results.Count() > 1)
         {
             throw new Exception($"More than one result for query: {sql}");
-        } else if(results.Count() == 1) {
+        }
+        else if (results.Count() == 1)
+        {
             return results[0];
-        } else {
+        }
+        else
+        {
             return default(T);
         }
     }
@@ -30,16 +34,18 @@ public class DaoUtil
         return list;
     }
 
-    public static void Execute(string connectionString, string sql,  List<NpgsqlParameter>? parameters = null)
+    public static void Execute(string connectionString, string sql, List<NpgsqlParameter>? parameters = null)
     {
         _connect(connectionString, sql, parameters);
     }
 
-    private static void _connect(string connectionString, string sql, List<NpgsqlParameter>? parameters, Action<NpgsqlDataReader>? mapperAction = null) {
-        using(NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
+    private static void _connect(string connectionString, string sql, List<NpgsqlParameter>? parameters, Action<NpgsqlDataReader>? mapperAction = null)
+    {
+        using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+        {
             NpgsqlCommand command = new NpgsqlCommand(sql, connection);
 
-            if(parameters != null)
+            if (parameters != null)
             {
                 parameters.ForEach(parameter => command.Parameters.Add(parameter));
             }
@@ -48,7 +54,7 @@ public class DaoUtil
 
             NpgsqlDataReader reader = command.ExecuteReader();
 
-            if(mapperAction != null)
+            if (mapperAction != null)
             {
                 while (reader.Read())
                 {
@@ -58,12 +64,13 @@ public class DaoUtil
         }
     }
 
-    public static int Create(string connectionString, string sql,  List<NpgsqlParameter>? parameters = null)
+    public static int Create(string connectionString, string sql, List<NpgsqlParameter>? parameters = null)
     {
-        using(NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
+        using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+        {
             NpgsqlCommand command = new NpgsqlCommand(sql, connection);
 
-            if(parameters != null)
+            if (parameters != null)
             {
                 parameters.ForEach(parameter => command.Parameters.Add(parameter));
             }

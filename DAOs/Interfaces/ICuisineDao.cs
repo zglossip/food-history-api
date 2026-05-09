@@ -1,6 +1,6 @@
 namespace food_history_api.DAOs.Interfaces;
 
-public interface ICusineDao
+public interface ICuisineDao
 {
     public List<string> Get(int recipeId);
 

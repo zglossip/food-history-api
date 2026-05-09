@@ -4,7 +4,8 @@ using Npgsql;
 
 namespace food_history_api.DAOs;
 
-public class DatabaseConnectionSupplier : IDatabaseConnectionSupplier{
+public class DatabaseConnectionSupplier : IDatabaseConnectionSupplier
+{
 
     private readonly string _connectionString;
     private readonly ILogger<DatabaseConnectionSupplier> _logger;
@@ -17,14 +18,15 @@ public class DatabaseConnectionSupplier : IDatabaseConnectionSupplier{
             .Build();
 
         NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder();
-            builder.Host = config["host"];
-            string? port = config["port"];
-            if(port != null) {
-                builder.Port = int.Parse((string)port);
-            }
-            builder.Database = config["database"];
-            builder.Username = config["username"];
-            builder.Password = config["password"];
+        builder.Host = config["host"];
+        string? port = config["port"];
+        if (port != null)
+        {
+            builder.Port = int.Parse((string)port);
+        }
+        builder.Database = config["database"];
+        builder.Username = config["username"];
+        builder.Password = config["password"];
 
         _logger.LogInformation($"Connecting to database: {builder.ConnectionString}");
 

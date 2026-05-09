@@ -12,7 +12,7 @@ builder.Services.AddScoped<IIngredientDao, IngredientDao>();
 builder.Services.AddScoped<IInstructionDao, InstructionDao>();
 builder.Services.AddScoped<IRecipeDao, RecipeDao>();
 builder.Services.AddScoped<ICourseDao, CourseDao>();
-builder.Services.AddScoped<ICusineDao, CuisineDao>();
+builder.Services.AddScoped<ICuisineDao, CuisineDao>();
 builder.Services.AddScoped<ITagDao, TagDao>();
 
 builder.Services.AddScoped<IIngredientService, IngredientService>();

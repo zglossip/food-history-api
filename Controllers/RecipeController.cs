@@ -7,24 +7,20 @@ namespace food_history_api.Controllers;
 
 [ApiController]
 [Route("recipe")]
-public class RecipeController : ControllerBase 
+public class RecipeController(IIngredientService ingredientService, IInstructionService instructionService, IRecipeService recipeService) : ControllerBase
 {
 
-    private readonly IIngredientService _ingredientService;
-    private readonly IInstructionService _instructionService;
-    private readonly IRecipeService _recipeService;
-
-    public RecipeController(IIngredientService ingredientService, IInstructionService instructionService, IRecipeService recipeService) {
-        _ingredientService = ingredientService;
-        _instructionService = instructionService;
-        _recipeService = recipeService;
-    }
+    private readonly IIngredientService _ingredientService = ingredientService;
+    private readonly IInstructionService _instructionService = instructionService;
+    private readonly IRecipeService _recipeService = recipeService;
 
     [HttpGet("{id}")]
-    public ActionResult<Recipe> Get(int id) {
+    public ActionResult<Recipe> Get(int id)
+    {
         Recipe? recipe = _recipeService.Get(id);
 
-        if(recipe == null) {
+        if (recipe == null)
+        {
             return NotFound();
         }
 
@@ -36,7 +32,7 @@ public class RecipeController : ControllerBase
     {
         RecipeColumn? sortColumn = null;
 
-        if(sort == "id")
+        if (sort == "id")
         {
             sortColumn = RecipeColumn.ID;
         }
@@ -55,13 +51,15 @@ public class RecipeController : ControllerBase
     {
         int id = _recipeService.Create(recipe);
         recipe.Id = id;
- 
+
         return CreatedAtAction(nameof(Get), new { id = id }, recipe);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Recipe recipe) {
-        if(_recipeService.Get(id) == null) {
+    public IActionResult Update(int id, Recipe recipe)
+    {
+        if (_recipeService.Get(id) == null)
+        {
             return NotFound();
         }
 
@@ -71,8 +69,10 @@ public class RecipeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id) {
-        if(_recipeService.Get(id) == null) {
+    public IActionResult Delete(int id)
+    {
+        if (_recipeService.Get(id) == null)
+        {
             return NotFound();
         }
 
@@ -81,21 +81,25 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet("{id}/ingredients")]
-    public ActionResult<IngredientList> GetIngredients(int id) {
-        
+    public ActionResult<IngredientList> GetIngredients(int id)
+    {
+
         IngredientList ingredientList = _ingredientService.Get(id);
 
-        if(ingredientList == null) {
+        if (ingredientList == null)
+        {
             return NotFound();
         }
 
         return ingredientList;
-        
+
     }
 
     [HttpPut("{id}/ingredients")]
-    public IActionResult UpdateIngredients(int id, IngredientList ingredientList){
-        if(_recipeService.Get(id) == null) {
+    public IActionResult UpdateIngredients(int id, IngredientList ingredientList)
+    {
+        if (_recipeService.Get(id) == null)
+        {
             return NotFound();
         }
 
@@ -105,10 +109,12 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet("{id}/instructions")]
-    public ActionResult<InstructionList> GetInstructions(int id) {
+    public ActionResult<InstructionList> GetInstructions(int id)
+    {
         InstructionList instructionList = _instructionService.Get(id);
 
-        if(instructionList == null) {
+        if (instructionList == null)
+        {
             return NotFound();
         }
 
@@ -116,11 +122,13 @@ public class RecipeController : ControllerBase
     }
 
     [HttpPut("{id}/instructions")]
-    public IActionResult UpdateInstructions(int id, InstructionList instructionList){
-        if(_recipeService.Get(id) == null) {
+    public IActionResult UpdateInstructions(int id, InstructionList instructionList)
+    {
+        if (_recipeService.Get(id) == null)
+        {
             return NotFound();
         }
-        
+
         instructionList.RecipeId = id;
         _instructionService.Update(instructionList);
         return NoContent();

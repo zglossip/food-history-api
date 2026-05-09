@@ -8,15 +8,10 @@ using food_history_api.Models.Enums;
 
 namespace food_history_api.DAOs;
 
-public class RecipeDao : IRecipeDao
+public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : IRecipeDao
 {
 
-    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier;
-
-    public RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier)
-    {
-        _databaseConnectionSupplier = databaseConnectionSupplier;
-    }
+    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
     public Recipe? Get(int id)
     {
@@ -24,7 +19,7 @@ public class RecipeDao : IRecipeDao
                      " FROM food_history.recipe" +
                      " WHERE id = @recipeId";
 
-        return DaoUtil.Query(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", id)});
+        return DaoUtil.Query(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", id) });
     }
 
     public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, string? name)
@@ -80,7 +75,8 @@ public class RecipeDao : IRecipeDao
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
 
-    public int Create(Recipe recipe) {
+    public int Create(Recipe recipe)
+    {
         string sql = " INSERT INTO food_history.recipe" +
                      " (name, serving_amount, serving_name, source)" +
                      " VALUES" +
@@ -98,7 +94,8 @@ public class RecipeDao : IRecipeDao
         return DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
     }
 
-    public void Update(Recipe recipe) {
+    public void Update(Recipe recipe)
+    {
         string sql = " UPDATE food_history.recipe" +
                      " SET name = @name, serving_amount = @servingAmount, serving_name = @servingName, source = @source" +
                      " WHERE id = @recipeId";
@@ -115,10 +112,11 @@ public class RecipeDao : IRecipeDao
         DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
     }
 
-    public void Delete(int id) {
+    public void Delete(int id)
+    {
         string sql = " DELETE FROM food_history.recipe" +
                      " WHERE id = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>(){new NpgsqlParameter("@recipeId", id)});
+        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", id) });
     }
 }

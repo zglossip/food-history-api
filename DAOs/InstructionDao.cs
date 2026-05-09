@@ -6,15 +6,10 @@ using Npgsql;
 
 namespace food_history_api.DAOs;
 
-public class InstructionDao : IInstructionDao
+public class InstructionDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : IInstructionDao
 {
 
-    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier;
-
-    public InstructionDao(IDatabaseConnectionSupplier databaseConnectionSupplier)
-    {
-        _databaseConnectionSupplier = databaseConnectionSupplier;
-    }
+    private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
     public List<string> Get(int recipeId)
     {
@@ -23,10 +18,10 @@ public class InstructionDao : IInstructionDao
                      "WHERE RECIPE_ID = @recipeId " +
                      "ORDER BY POSITION ASC";
 
-        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), 
-                      sql, 
+        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(),
+                      sql,
                       new InstructionMapper(),
-                      new List<NpgsqlParameter>{new NpgsqlParameter("@recipeId", recipeId)});
+                      new List<NpgsqlParameter> { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
     public void Delete(int recipeId)
@@ -34,9 +29,9 @@ public class InstructionDao : IInstructionDao
         string sql = "DELETE FROM food_history.INSTRUCTION " +
                      "WHERE RECIPE_ID = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), 
-                        sql, 
-                        new List<NpgsqlParameter>{new NpgsqlParameter("@recipeId", recipeId)});
+        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(),
+                        sql,
+                        new List<NpgsqlParameter> { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
     public void Create(List<string> instructions, int recipeId)
@@ -46,7 +41,7 @@ public class InstructionDao : IInstructionDao
 
         int position = 0;
 
-        instructions.ForEach(instruction => 
+        instructions.ForEach(instruction =>
         {
             List<NpgsqlParameter> sqlParameters = new List<NpgsqlParameter>
             {
