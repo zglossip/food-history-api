@@ -1,40 +1,21 @@
 using recipe_catalog_api.DAOs.Interfaces;
-
 using Npgsql;
 
 namespace recipe_catalog_api.DAOs;
 
 public class DatabaseConnectionSupplier : IDatabaseConnectionSupplier
 {
-
     private readonly string _connectionString;
-    private readonly ILogger<DatabaseConnectionSupplier> _logger;
 
-    public DatabaseConnectionSupplier(ILogger<DatabaseConnectionSupplier> logger)
+    public DatabaseConnectionSupplier(IConfiguration config, ILogger<DatabaseConnectionSupplier> logger)
     {
-        _logger = logger;
-        IConfiguration config = new ConfigurationBuilder()
-            .AddJsonFile("connectionsettings.json")
-            .Build();
+        _connectionString = config.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is not configured");
 
-        NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder();
-        builder.Host = config["host"];
-        string? port = config["port"];
-        if (port != null)
-        {
-            builder.Port = int.Parse((string)port);
-        }
-        builder.Database = config["database"];
-        builder.Username = config["username"];
-        builder.Password = config["password"];
-
-        _logger.LogInformation("Connecting to database host={Host} database={Database}", builder.Host, builder.Database);
-
-        _connectionString = builder.ConnectionString;
+        var builder = new NpgsqlConnectionStringBuilder(_connectionString);
+        logger.LogInformation("Connecting to database host={Host} database={Database}",
+            builder.Host, builder.Database);
     }
 
-    public string GetConnectionString()
-    {
-        return _connectionString;
-    }
+    public string GetConnectionString() => _connectionString;
 }
