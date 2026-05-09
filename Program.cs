@@ -1,3 +1,4 @@
+using food_history_api.Config;
 using food_history_api.Services;
 using food_history_api.Services.Interfaces;
 using food_history_api.DAOs;
@@ -6,6 +7,9 @@ using food_history_api.DAOs.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 //DI Setup
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddSingleton<IDatabaseConnectionSupplier, DatabaseConnectionSupplier>();
 
 builder.Services.AddScoped<IIngredientDao, IngredientDao>();
@@ -39,6 +43,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
