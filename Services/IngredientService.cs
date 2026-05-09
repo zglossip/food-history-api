@@ -1,8 +1,8 @@
-using food_history_api.Models;
-using food_history_api.DAOs.Interfaces;
-using food_history_api.Services.Interfaces;
+using recipe_catalog_api.Models;
+using recipe_catalog_api.DAOs.Interfaces;
+using recipe_catalog_api.Services.Interfaces;
 
-namespace food_history_api.Services;
+namespace recipe_catalog_api.Services;
 
 public class IngredientService(IIngredientDao ingredientDao) : IIngredientService
 {

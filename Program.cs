@@ -1,8 +1,8 @@
-using food_history_api.Config;
-using food_history_api.Services;
-using food_history_api.Services.Interfaces;
-using food_history_api.DAOs;
-using food_history_api.DAOs.Interfaces;
+using recipe_catalog_api.Config;
+using recipe_catalog_api.Services;
+using recipe_catalog_api.Services.Interfaces;
+using recipe_catalog_api.DAOs;
+using recipe_catalog_api.DAOs.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

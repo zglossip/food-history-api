@@ -1,8 +1,8 @@
-using food_history_api.DAOs.Interfaces;
+using recipe_catalog_api.DAOs.Interfaces;
 
 using Npgsql;
 
-namespace food_history_api.DAOs;
+namespace recipe_catalog_api.DAOs;
 
 public class DatabaseConnectionSupplier : IDatabaseConnectionSupplier
 {

@@ -1,6 +1,6 @@
 using Npgsql;
 
-namespace food_history_api.DAOs.Mappers;
+namespace recipe_catalog_api.DAOs.Mappers;
 
 public abstract class AbstractMapper<T>
 {

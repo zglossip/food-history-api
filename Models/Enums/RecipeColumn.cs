@@ -1,4 +1,4 @@
-namespace food_history_api.Models.Enums;
+namespace recipe_catalog_api.Models.Enums;
 
 public enum RecipeColumn
 {

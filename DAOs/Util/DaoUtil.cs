@@ -1,8 +1,8 @@
-using food_history_api.DAOs.Mappers;
+using recipe_catalog_api.DAOs.Mappers;
 
 using Npgsql;
 
-namespace food_history_api.DAOs.Util;
+namespace recipe_catalog_api.DAOs.Util;
 
 public class DaoUtil
 {

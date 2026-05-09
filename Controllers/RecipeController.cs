@@ -1,9 +1,9 @@
-using food_history_api.Models;
-using food_history_api.Models.Enums;
-using food_history_api.Services.Interfaces;
+using recipe_catalog_api.Models;
+using recipe_catalog_api.Models.Enums;
+using recipe_catalog_api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace food_history_api.Controllers;
+namespace recipe_catalog_api.Controllers;
 
 [ApiController]
 [Route("recipe")]

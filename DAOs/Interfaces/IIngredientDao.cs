@@ -1,6 +1,6 @@
-using food_history_api.Models;
+using recipe_catalog_api.Models;
 
-namespace food_history_api.DAOs.Interfaces;
+namespace recipe_catalog_api.DAOs.Interfaces;
 
 public interface IIngredientDao
 {

@@ -1,12 +1,12 @@
-using food_history_api.Models;
-using food_history_api.DAOs.Interfaces;
-using food_history_api.DAOs.Mappers;
-using food_history_api.DAOs.Util;
+using recipe_catalog_api.Models;
+using recipe_catalog_api.DAOs.Interfaces;
+using recipe_catalog_api.DAOs.Mappers;
+using recipe_catalog_api.DAOs.Util;
 
 using Npgsql;
-using food_history_api.Models.Enums;
+using recipe_catalog_api.Models.Enums;
 
-namespace food_history_api.DAOs;
+namespace recipe_catalog_api.DAOs;
 
 public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : IRecipeDao
 {
@@ -16,7 +16,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
     public Recipe? Get(int id)
     {
         string sql = " SELECT id, name, serving_amount, serving_name, source, uploaded" +
-                     " FROM food_history.recipe" +
+                     " FROM recipe_catalog.recipe" +
                      " WHERE id = @recipeId";
 
         return DaoUtil.Query(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", id) });
@@ -48,17 +48,17 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
         }
 
         string sql = "SELECT r.id, r.name, r.serving_amount, r.serving_name, r.source, r.uploaded " +
-                     "FROM food_history.recipe r " +
+                     "FROM recipe_catalog.recipe r " +
                      "WHERE (@courseLength = 0 OR (SELECT COUNT(*) AS courseCount " +
-                     "        FROM food_history.course " +
+                     "        FROM recipe_catalog.course " +
                      "        WHERE text IN (" + courseQuery + ") " +
                      "          AND recipe_id = r.id) = @courseLength) " +
                      "  AND (@cuisineLength = 0 OR (SELECT COUNT(*) AS cuisineCount " +
-                     "        FROM food_history.cuisine " +
+                     "        FROM recipe_catalog.cuisine " +
                      "        WHERE text IN (" + cuisineQuery + ") " +
                      "          AND recipe_id = r.id) = @cuisineLength) " +
                      "  AND (@tagLength = 0 OR (SELECT COUNT(*) AS tagCount " +
-                     "        FROM food_history.tag " +
+                     "        FROM recipe_catalog.tag " +
                      "        WHERE text IN (" + tagQuery + ") " +
                      "          AND recipe_id = r.id) = @tagLength)" +
                      "  AND (@name IS NULL OR UPPER(r.name) LIKE UPPER(@name))";
@@ -77,7 +77,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
 
     public int Create(Recipe recipe)
     {
-        string sql = " INSERT INTO food_history.recipe" +
+        string sql = " INSERT INTO recipe_catalog.recipe" +
                      " (name, serving_amount, serving_name, source)" +
                      " VALUES" +
                      " (@name, @servingAmount, @servingName, @source)" +
@@ -96,7 +96,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
 
     public void Update(Recipe recipe)
     {
-        string sql = " UPDATE food_history.recipe" +
+        string sql = " UPDATE recipe_catalog.recipe" +
                      " SET name = @name, serving_amount = @servingAmount, serving_name = @servingName, source = @source" +
                      " WHERE id = @recipeId";
 
@@ -114,7 +114,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
 
     public void Delete(int id)
     {
-        string sql = " DELETE FROM food_history.recipe" +
+        string sql = " DELETE FROM recipe_catalog.recipe" +
                      " WHERE id = @recipeId";
 
         DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", id) });

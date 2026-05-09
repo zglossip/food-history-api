@@ -1,4 +1,4 @@
-CREATE TABLE food_history.recipe
+CREATE TABLE recipe_catalog.recipe
 (
     id smallserial NOT NULL,
     name character varying(100) NOT NULL,

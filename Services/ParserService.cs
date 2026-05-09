@@ -1,7 +1,7 @@
-using food_history_api.Models;
-using food_history_api.Services.Interfaces;
+using recipe_catalog_api.Models;
+using recipe_catalog_api.Services.Interfaces;
 
-namespace food_history_api.Services;
+namespace recipe_catalog_api.Services;
 
 public class ParserService(IRecipeService recipeService, IIngredientService ingredientService, IInstructionService instructionService) : IParserService
 {

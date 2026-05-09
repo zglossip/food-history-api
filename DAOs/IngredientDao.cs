@@ -1,11 +1,11 @@
-using food_history_api.Models;
-using food_history_api.DAOs.Interfaces;
-using food_history_api.DAOs.Mappers;
-using food_history_api.DAOs.Util;
+using recipe_catalog_api.Models;
+using recipe_catalog_api.DAOs.Interfaces;
+using recipe_catalog_api.DAOs.Mappers;
+using recipe_catalog_api.DAOs.Util;
 
 using Npgsql;
 
-namespace food_history_api.DAOs;
+namespace recipe_catalog_api.DAOs;
 
 public class IngredientDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : IIngredientDao
 {
@@ -15,7 +15,7 @@ public class IngredientDao(IDatabaseConnectionSupplier databaseConnectionSupplie
     public List<Ingredient> Get(int recipeId)
     {
         string sql = "SELECT NAME, QUANTITY, UOM, NOTES " +
-                     "FROM food_history.INGREDIENT " +
+                     "FROM recipe_catalog.INGREDIENT " +
                      "WHERE RECIPE_ID = @recipeId " +
                      "ORDER BY POSITION ASC";
 
@@ -27,7 +27,7 @@ public class IngredientDao(IDatabaseConnectionSupplier databaseConnectionSupplie
 
     public void Delete(int recipeId)
     {
-        string sql = "DELETE FROM food_history.INGREDIENT " +
+        string sql = "DELETE FROM recipe_catalog.INGREDIENT " +
                      "WHERE RECIPE_ID = @recipeId";
 
         DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(),
@@ -37,7 +37,7 @@ public class IngredientDao(IDatabaseConnectionSupplier databaseConnectionSupplie
 
     public void Create(List<Ingredient> ingredientList, int recipeId)
     {
-        string sql = "INSERT INTO food_history.INGREDIENT (RECIPE_ID, POSITION, NAME, QUANTITY, UOM, NOTES) " +
+        string sql = "INSERT INTO recipe_catalog.INGREDIENT (RECIPE_ID, POSITION, NAME, QUANTITY, UOM, NOTES) " +
                      "VALUES(@recipeId, @position, @name, @quantity, @uom, @notes)";
 
         int position = 0;

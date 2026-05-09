@@ -1,11 +1,11 @@
-# Food History API 
+# Recipe Catalog API 
 Version 0.1.0
 
 A REST API that will be used to service an upcoming recipe catalog/food diary application
 
 ## Frontend
 
-This API serves as the backend to the [Food History mobile application](https://github.com/zglossip/food-history-app)
+This API serves as the backend to the [Recipe Catalog mobile application](https://github.com/zglossip/food-history-app)
 
 To run the full application, you will need to clone and run both the backend and the frontend
 

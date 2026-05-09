@@ -1,4 +1,4 @@
-namespace food_history_api.DAOs.Mappers;
+namespace recipe_catalog_api.DAOs.Mappers;
 
 public class InstructionMapper : AbstractMapper<string>
 {

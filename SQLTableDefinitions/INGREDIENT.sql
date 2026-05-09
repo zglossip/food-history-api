@@ -1,4 +1,4 @@
-CREATE TABLE food_history.ingredient
+CREATE TABLE recipe_catalog.ingredient
 (
     recipe_id smallint NOT NULL,
     "position" smallint NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE food_history.ingredient
     notes character varying(150),
     PRIMARY KEY (recipe_id, name),
     CONSTRAINT "recipe_FK" FOREIGN KEY (recipe_id)
-        REFERENCES food_history.recipe (id) MATCH SIMPLE
+        REFERENCES recipe_catalog.recipe (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID

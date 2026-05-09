@@ -1,10 +1,10 @@
-using food_history_api.DAOs.Interfaces;
-using food_history_api.DAOs.Mappers;
-using food_history_api.DAOs.Util;
+using recipe_catalog_api.DAOs.Interfaces;
+using recipe_catalog_api.DAOs.Mappers;
+using recipe_catalog_api.DAOs.Util;
 
 using Npgsql;
 
-namespace food_history_api.DAOs;
+namespace recipe_catalog_api.DAOs;
 
 public class InstructionDao(IDatabaseConnectionSupplier databaseConnectionSupplier) : IInstructionDao
 {
@@ -14,7 +14,7 @@ public class InstructionDao(IDatabaseConnectionSupplier databaseConnectionSuppli
     public List<string> Get(int recipeId)
     {
         string sql = "SELECT TEXT " +
-                     "FROM food_history.INSTRUCTION " +
+                     "FROM recipe_catalog.INSTRUCTION " +
                      "WHERE RECIPE_ID = @recipeId " +
                      "ORDER BY POSITION ASC";
 
@@ -26,7 +26,7 @@ public class InstructionDao(IDatabaseConnectionSupplier databaseConnectionSuppli
 
     public void Delete(int recipeId)
     {
-        string sql = "DELETE FROM food_history.INSTRUCTION " +
+        string sql = "DELETE FROM recipe_catalog.INSTRUCTION " +
                      "WHERE RECIPE_ID = @recipeId";
 
         DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(),
@@ -36,7 +36,7 @@ public class InstructionDao(IDatabaseConnectionSupplier databaseConnectionSuppli
 
     public void Create(List<string> instructions, int recipeId)
     {
-        string sql = "INSERT INTO food_history.INSTRUCTION (RECIPE_ID, POSITION, TEXT) " +
+        string sql = "INSERT INTO recipe_catalog.INSTRUCTION (RECIPE_ID, POSITION, TEXT) " +
                      "VALUES(@recipeId, @position, @text)";
 
         int position = 0;

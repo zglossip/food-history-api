@@ -1,4 +1,4 @@
-namespace food_history_api.DAOs.Interfaces;
+namespace recipe_catalog_api.DAOs.Interfaces;
 
 public interface IDatabaseConnectionSupplier
 {

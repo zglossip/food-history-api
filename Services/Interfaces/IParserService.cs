@@ -1,4 +1,4 @@
-namespace food_history_api.Services.Interfaces;
+namespace recipe_catalog_api.Services.Interfaces;
 
 public interface IParserService
 {

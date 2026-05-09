@@ -1,4 +1,4 @@
-namespace food_history_api.Models;
+namespace recipe_catalog_api.Models;
 
 public class Recipe
 {

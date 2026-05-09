@@ -1,6 +1,6 @@
 using Npgsql;
 
-namespace food_history_api.DAOs.Util;
+namespace recipe_catalog_api.DAOs.Util;
 
 public class QueryParamList<T>
 {

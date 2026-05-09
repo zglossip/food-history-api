@@ -1,9 +1,9 @@
-using food_history_api.Models;
-using food_history_api.DAOs.Interfaces;
-using food_history_api.Services.Interfaces;
-using food_history_api.Models.Enums;
+using recipe_catalog_api.Models;
+using recipe_catalog_api.DAOs.Interfaces;
+using recipe_catalog_api.Services.Interfaces;
+using recipe_catalog_api.Models.Enums;
 
-namespace food_history_api.Services;
+namespace recipe_catalog_api.Services;
 
 public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineDao cuisineDao, ITagDao tagDao) : IRecipeService
 {
