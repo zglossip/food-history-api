@@ -11,13 +11,13 @@ public class CuisineDao(IDatabaseConnectionSupplier databaseConnectionSupplier) 
 
     private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
-    public void Create(List<string> cusisines, int recipeId)
+    public void Create(List<string> cuisines, int recipeId)
     {
         string sql = " INSERT INTO food_history.cuisine" +
                      " (recipe_id, text)" +
                      " VALUES (@recipeId, @text)";
 
-        cusisines.ForEach(cuisine =>
+        cuisines.ForEach(cuisine =>
         {
             List<NpgsqlParameter> parameters = new List<NpgsqlParameter>(){
                 new NpgsqlParameter("@recipeId", recipeId),
