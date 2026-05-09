@@ -61,7 +61,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
                      "        FROM food_history.tag " +
                      "        WHERE text IN (" + tagQuery + ") " +
                      "          AND recipe_id = r.id) = @tagLength)" +
-                     "  AND @name IS NULL OR UPPER(r.name) LIKE UPPER(@name)";
+                     "  AND (@name IS NULL OR UPPER(r.name) LIKE UPPER(@name))";
 
         List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
         courseQueryParamList.PopulateParamList(parameters);
@@ -70,7 +70,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
         parameters.Add(new NpgsqlParameter("@courseLength", courses.Count));
         parameters.Add(new NpgsqlParameter("@cuisineLength", cuisines.Count));
         parameters.Add(new NpgsqlParameter("@tagLength", tags.Count));
-        parameters.Add(new NpgsqlParameter("@name", "%" + name + "%"));
+        parameters.Add(new NpgsqlParameter("@name", name == null ? (object)DBNull.Value : "%" + name + "%"));
 
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
