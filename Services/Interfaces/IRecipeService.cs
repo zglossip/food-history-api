@@ -11,7 +11,11 @@ public interface IRecipeService
 
     public int Create(RecipeRequest recipe);
 
+    public int CreateFull(FullRecipeRequest recipe);
+
     public void Update(int id, RecipeRequest recipe);
+
+    public bool Exists(int id);
 
     public void Delete(int id);
 }

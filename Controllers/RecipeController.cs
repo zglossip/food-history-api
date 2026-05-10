@@ -47,16 +47,16 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     }
 
     [HttpPost]
-    public IActionResult Create(RecipeRequest recipe)
+    public IActionResult CreateFull(FullRecipeRequest recipe)
     {
-        int id = _recipeService.Create(recipe);
+        int id = _recipeService.CreateFull(recipe);
         return StatusCode(201, new { id });
     }
 
     [HttpPut("{id}")]
     public IActionResult Update(int id, RecipeRequest recipe)
     {
-        if (_recipeService.Get(id) == null)
+        if (!_recipeService.Exists(id))
         {
             return NotFound();
         }
@@ -68,7 +68,7 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        if (_recipeService.Get(id) == null)
+        if (!_recipeService.Exists(id))
         {
             return NotFound();
         }
@@ -95,7 +95,7 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     [HttpPut("{id}/ingredients")]
     public IActionResult UpdateIngredients(int id, IngredientList ingredientList)
     {
-        if (_recipeService.Get(id) == null)
+        if (!_recipeService.Exists(id))
         {
             return NotFound();
         }
@@ -121,7 +121,7 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     [HttpPut("{id}/instructions")]
     public IActionResult UpdateInstructions(int id, InstructionList instructionList)
     {
-        if (_recipeService.Get(id) == null)
+        if (!_recipeService.Exists(id))
         {
             return NotFound();
         }

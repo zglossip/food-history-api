@@ -7,11 +7,15 @@ public interface IRecipeDao
 {
     public Recipe? Get(int id);
 
-    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, string? name);
+    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name);
 
     public int Create(RecipeRequest recipe);
 
+    public int CreateFull(FullRecipeRequest recipe);
+
     public void Update(int id, RecipeRequest recipe);
+
+    public bool Exists(int id);
 
     public void Delete(int id);
 }

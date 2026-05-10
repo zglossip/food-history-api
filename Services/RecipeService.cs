@@ -19,19 +19,7 @@ public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineD
 
     public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name)
     {
-        List<Recipe> recipes = _recipeDao.Get(courses, cuisines, tags, sortColumn, name).Select(_getPopulatedRecipe).ToList();
-
-        switch (sortColumn)
-        {
-            case RecipeColumn.NAME:
-                recipes.Sort((x, y) => (reverse != null && reverse.Value ? -1 : 1) * x.Name.CompareTo(y.Name));
-                break;
-            default:
-                recipes.Sort((x, y) => (reverse != null && reverse.Value ? -1 : 1) * (x.Id < y.Id ? -1 : x.Id == y.Id ? 0 : 1));
-                break;
-        }
-
-        return recipes;
+        return _recipeDao.Get(courses, cuisines, tags, sortColumn, reverse, name).Select(_getPopulatedRecipe).ToList();
     }
 
     private Recipe _getPopulatedRecipe(Recipe? recipe)
@@ -46,6 +34,8 @@ public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineD
         newRecipe.Tags = _tagDao.Get(recipe.Id);
         return newRecipe;
     }
+
+    public int CreateFull(FullRecipeRequest recipe) => _recipeDao.CreateFull(recipe);
 
     public int Create(RecipeRequest recipe)
     {
@@ -66,6 +56,8 @@ public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineD
         _tagDao.Delete(id);
         _tagDao.Create(recipe.Tags, id);
     }
+
+    public bool Exists(int id) => _recipeDao.Exists(id);
 
     public void Delete(int id) => _recipeDao.Delete(id);
 }
