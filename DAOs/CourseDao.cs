@@ -11,37 +11,37 @@ public class CourseDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
 
     private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
-    public void Create(List<string> courses, int recipeId)
+    public async Task CreateAsync(List<string> courses, int recipeId)
     {
         string sql = " INSERT INTO recipe_catalog.course" +
                      " (recipe_id, text)" +
                      " VALUES (@recipeId, @text)";
 
-        courses.ForEach(course =>
+        foreach (string course in courses)
         {
             List<NpgsqlParameter> parameters = new List<NpgsqlParameter>(){
                 new NpgsqlParameter("@recipeId", recipeId),
                 new NpgsqlParameter("@text", course)
             };
 
-            DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
-        });
+            await DaoUtil.ExecuteAsync(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
+        }
     }
 
-    public void Delete(int recipeId)
+    public Task DeleteAsync(int recipeId)
     {
         string sql = " DELETE FROM recipe_catalog.course" +
                      " WHERE recipe_id = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
+        return DaoUtil.ExecuteAsync(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
-    public List<string> Get(int recipeId)
+    public Task<List<string>> GetAsync(int recipeId)
     {
         string sql = " SELECT text" +
                      " FROM recipe_catalog.course" +
                      " WHERE recipe_id = @recipeId";
 
-        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new CourseMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
+        return DaoUtil.QueryForListAsync(_databaseConnectionSupplier.GetConnectionString(), sql, new CourseMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", recipeId) });
     }
 }

@@ -13,16 +13,16 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
 
     private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
-    public Recipe? Get(int id)
+    public Task<Recipe?> GetAsync(int id)
     {
         string sql = " SELECT id, name, serving_amount, serving_name, source, uploaded" +
                      " FROM recipe_catalog.recipe" +
                      " WHERE id = @recipeId";
 
-        return DaoUtil.Query(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", id) });
+        return DaoUtil.QueryAsync(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", id) });
     }
 
-    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name)
+    public Task<List<Recipe>> GetAsync(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name)
     {
         QueryParamList<string> courseQueryParamList = new QueryParamList<string>("course", courses);
         QueryParamList<string> cuisineQueryParamList = new QueryParamList<string>("cuisine", cuisines);
@@ -83,10 +83,10 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
             Value = name == null ? (object)DBNull.Value : "%" + name + "%"
         });
 
-        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
+        return DaoUtil.QueryForListAsync(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
 
-    public int Create(RecipeRequest recipe)
+    public Task<int> CreateAsync(RecipeRequest recipe)
     {
         string sql = " INSERT INTO recipe_catalog.recipe" +
                      " (name, serving_amount, serving_name, source)" +
@@ -102,60 +102,60 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
             new NpgsqlParameter("@source", recipe.Source == null ? DBNull.Value : recipe.Source)
         };
 
-        return DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
+        return DaoUtil.CreateAsync(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
     }
 
-    public int CreateFull(FullRecipeRequest recipe)
+    public async Task<int> CreateFullAsync(FullRecipeRequest recipe)
     {
-        using NpgsqlConnection connection = new NpgsqlConnection(_databaseConnectionSupplier.GetConnectionString());
-        connection.Open();
-        using NpgsqlTransaction transaction = connection.BeginTransaction();
+        await using NpgsqlConnection connection = new NpgsqlConnection(_databaseConnectionSupplier.GetConnectionString());
+        await connection.OpenAsync();
+        await using NpgsqlTransaction transaction = await connection.BeginTransactionAsync();
 
         try
         {
-            NpgsqlCommand recipeCmd = new(
+            await using NpgsqlCommand recipeCmd = new(
                 "INSERT INTO recipe_catalog.recipe (name, serving_amount, serving_name, source) VALUES (@name, @servingAmount, @servingName, @source) RETURNING id",
                 connection, transaction);
             recipeCmd.Parameters.Add(new NpgsqlParameter("@name", recipe.Name));
             recipeCmd.Parameters.Add(new NpgsqlParameter("@servingAmount", recipe.ServingAmount));
             recipeCmd.Parameters.Add(new NpgsqlParameter("@servingName", recipe.ServingName));
             recipeCmd.Parameters.Add(new NpgsqlParameter("@source", recipe.Source == null ? DBNull.Value : recipe.Source));
-            int id = Convert.ToInt32(recipeCmd.ExecuteScalar());
+            int id = Convert.ToInt32(await recipeCmd.ExecuteScalarAsync());
 
             foreach (string course in recipe.CourseTypes)
             {
-                NpgsqlCommand cmd = new(
+                await using NpgsqlCommand cmd = new(
                     "INSERT INTO recipe_catalog.course (recipe_id, text) VALUES (@recipeId, @text)",
                     connection, transaction);
                 cmd.Parameters.Add(new NpgsqlParameter("@recipeId", id));
                 cmd.Parameters.Add(new NpgsqlParameter("@text", course));
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
             }
 
             foreach (string cuisine in recipe.CuisineTypes)
             {
-                NpgsqlCommand cmd = new(
+                await using NpgsqlCommand cmd = new(
                     "INSERT INTO recipe_catalog.cuisine (recipe_id, text) VALUES (@recipeId, @text)",
                     connection, transaction);
                 cmd.Parameters.Add(new NpgsqlParameter("@recipeId", id));
                 cmd.Parameters.Add(new NpgsqlParameter("@text", cuisine));
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
             }
 
             foreach (string tag in recipe.Tags)
             {
-                NpgsqlCommand cmd = new(
+                await using NpgsqlCommand cmd = new(
                     "INSERT INTO recipe_catalog.tag (recipe_id, text) VALUES (@recipeId, @text)",
                     connection, transaction);
                 cmd.Parameters.Add(new NpgsqlParameter("@recipeId", id));
                 cmd.Parameters.Add(new NpgsqlParameter("@text", tag));
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
             }
 
             int position = 0;
             foreach (Ingredient ingredient in recipe.Ingredients)
             {
-                NpgsqlCommand cmd = new(
+                await using NpgsqlCommand cmd = new(
                     "INSERT INTO recipe_catalog.INGREDIENT (RECIPE_ID, POSITION, NAME, QUANTITY, UOM, NOTES) VALUES (@recipeId, @position, @name, @quantity, @uom, @notes)",
                     connection, transaction);
                 cmd.Parameters.Add(new NpgsqlParameter("@recipeId", id));
@@ -164,32 +164,32 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
                 cmd.Parameters.Add(new NpgsqlParameter("@quantity", ingredient.Quantity));
                 cmd.Parameters.Add(new NpgsqlParameter("@uom", ingredient.Uom == null ? DBNull.Value : ingredient.Uom));
                 cmd.Parameters.Add(new NpgsqlParameter("@notes", ingredient.Notes == null ? DBNull.Value : ingredient.Notes));
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
             }
 
             position = 0;
             foreach (string instruction in recipe.Instructions)
             {
-                NpgsqlCommand cmd = new(
+                await using NpgsqlCommand cmd = new(
                     "INSERT INTO recipe_catalog.INSTRUCTION (RECIPE_ID, POSITION, TEXT) VALUES (@recipeId, @position, @text)",
                     connection, transaction);
                 cmd.Parameters.Add(new NpgsqlParameter("@recipeId", id));
                 cmd.Parameters.Add(new NpgsqlParameter("@position", position++));
                 cmd.Parameters.Add(new NpgsqlParameter("@text", instruction));
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
             }
 
-            transaction.Commit();
+            await transaction.CommitAsync();
             return id;
         }
         catch
         {
-            transaction.Rollback();
+            await transaction.RollbackAsync();
             throw;
         }
     }
 
-    public void Update(int id, RecipeRequest recipe)
+    public Task UpdateAsync(int id, RecipeRequest recipe)
     {
         string sql = " UPDATE recipe_catalog.recipe" +
                      " SET name = @name, serving_amount = @servingAmount, serving_name = @servingName, source = @source" +
@@ -204,25 +204,25 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
             new NpgsqlParameter("@recipeId", id)
         };
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
+        return DaoUtil.ExecuteAsync(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
     }
 
-    public bool Exists(int id)
+    public async Task<bool> ExistsAsync(int id)
     {
         string sql = "SELECT 1 FROM recipe_catalog.recipe WHERE id = @recipeId LIMIT 1";
-        using NpgsqlConnection connection = new NpgsqlConnection(_databaseConnectionSupplier.GetConnectionString());
-        NpgsqlCommand command = new NpgsqlCommand(sql, connection);
+        await using NpgsqlConnection connection = new NpgsqlConnection(_databaseConnectionSupplier.GetConnectionString());
+        await using NpgsqlCommand command = new NpgsqlCommand(sql, connection);
         command.Parameters.Add(new NpgsqlParameter("@recipeId", id));
-        connection.Open();
-        using NpgsqlDataReader reader = command.ExecuteReader();
-        return reader.Read();
+        await connection.OpenAsync();
+        await using NpgsqlDataReader reader = await command.ExecuteReaderAsync();
+        return await reader.ReadAsync();
     }
 
-    public void Delete(int id)
+    public Task DeleteAsync(int id)
     {
         string sql = " DELETE FROM recipe_catalog.recipe" +
                      " WHERE id = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", id) });
+        return DaoUtil.ExecuteAsync(_databaseConnectionSupplier.GetConnectionString(), sql, new List<NpgsqlParameter>() { new NpgsqlParameter("@recipeId", id) });
     }
 }

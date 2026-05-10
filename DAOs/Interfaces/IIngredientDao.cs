@@ -4,9 +4,9 @@ namespace recipe_catalog_api.DAOs.Interfaces;
 
 public interface IIngredientDao
 {
-    public List<Ingredient> Get(int recipeId);
+    public Task<List<Ingredient>> GetAsync(int recipeId);
 
-    public void Delete(int recipeId);
+    public Task DeleteAsync(int recipeId);
 
-    public void Create(List<Ingredient> ingredientList, int recipeId);
+    public Task CreateAsync(List<Ingredient> ingredientList, int recipeId);
 }

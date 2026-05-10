@@ -12,37 +12,37 @@ public class IngredientDao(IDatabaseConnectionSupplier databaseConnectionSupplie
 
     private readonly IDatabaseConnectionSupplier _databaseConnectionSupplier = databaseConnectionSupplier;
 
-    public List<Ingredient> Get(int recipeId)
+    public Task<List<Ingredient>> GetAsync(int recipeId)
     {
         string sql = "SELECT NAME, QUANTITY, UOM, NOTES " +
                      "FROM recipe_catalog.INGREDIENT " +
                      "WHERE RECIPE_ID = @recipeId " +
                      "ORDER BY POSITION ASC";
 
-        return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(),
+        return DaoUtil.QueryForListAsync(_databaseConnectionSupplier.GetConnectionString(),
                       sql,
                       new IngredientMapper(),
                       new List<NpgsqlParameter> { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
-    public void Delete(int recipeId)
+    public Task DeleteAsync(int recipeId)
     {
         string sql = "DELETE FROM recipe_catalog.INGREDIENT " +
                      "WHERE RECIPE_ID = @recipeId";
 
-        DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(),
+        return DaoUtil.ExecuteAsync(_databaseConnectionSupplier.GetConnectionString(),
                         sql,
                         new List<NpgsqlParameter> { new NpgsqlParameter("@recipeId", recipeId) });
     }
 
-    public void Create(List<Ingredient> ingredientList, int recipeId)
+    public async Task CreateAsync(List<Ingredient> ingredientList, int recipeId)
     {
         string sql = "INSERT INTO recipe_catalog.INGREDIENT (RECIPE_ID, POSITION, NAME, QUANTITY, UOM, NOTES) " +
                      "VALUES(@recipeId, @position, @name, @quantity, @uom, @notes)";
 
         int position = 0;
 
-        ingredientList.ForEach(ingredient =>
+        foreach (Ingredient ingredient in ingredientList)
         {
             List<NpgsqlParameter> sqlParameters = new List<NpgsqlParameter>
             {
@@ -54,10 +54,10 @@ public class IngredientDao(IDatabaseConnectionSupplier databaseConnectionSupplie
                 new NpgsqlParameter("@notes", ingredient.Notes == null ? DBNull.Value : ingredient.Notes)
             };
 
-            DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(),
+            await DaoUtil.ExecuteAsync(_databaseConnectionSupplier.GetConnectionString(),
                             sql,
                             sqlParameters);
-        });
+        }
     }
 
 }

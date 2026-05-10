@@ -12,52 +12,58 @@ public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineD
     private readonly ICuisineDao _cuisineDao = cuisineDao;
     private readonly ITagDao _tagDao = tagDao;
 
-    public Recipe? Get(int id)
+    public async Task<Recipe?> GetAsync(int id)
     {
-        return _getPopulatedRecipe(_recipeDao.Get(id));
+        return await _getPopulatedRecipeAsync(await _recipeDao.GetAsync(id));
     }
 
-    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name)
+    public async Task<List<Recipe>> GetAsync(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name)
     {
-        return _recipeDao.Get(courses, cuisines, tags, sortColumn, reverse, name).Select(_getPopulatedRecipe).ToList();
+        List<Recipe> recipes = await _recipeDao.GetAsync(courses, cuisines, tags, sortColumn, reverse, name);
+        List<Recipe> result = new List<Recipe>(recipes.Count);
+        foreach (Recipe recipe in recipes)
+        {
+            result.Add(await _getPopulatedRecipeAsync(recipe));
+        }
+        return result;
     }
 
-    private Recipe _getPopulatedRecipe(Recipe? recipe)
+    private async Task<Recipe> _getPopulatedRecipeAsync(Recipe? recipe)
     {
         if (recipe == null)
         {
             throw new Exception("Cannot populate null recipe.");
         }
         Recipe newRecipe = recipe.Clone();
-        newRecipe.CourseTypes = _courseDao.Get(recipe.Id);
-        newRecipe.CuisineTypes = _cuisineDao.Get(recipe.Id);
-        newRecipe.Tags = _tagDao.Get(recipe.Id);
+        newRecipe.CourseTypes = await _courseDao.GetAsync(recipe.Id);
+        newRecipe.CuisineTypes = await _cuisineDao.GetAsync(recipe.Id);
+        newRecipe.Tags = await _tagDao.GetAsync(recipe.Id);
         return newRecipe;
     }
 
-    public int CreateFull(FullRecipeRequest recipe) => _recipeDao.CreateFull(recipe);
+    public Task<int> CreateFullAsync(FullRecipeRequest recipe) => _recipeDao.CreateFullAsync(recipe);
 
-    public int Create(RecipeRequest recipe)
+    public async Task<int> CreateAsync(RecipeRequest recipe)
     {
-        int id = _recipeDao.Create(recipe);
-        _courseDao.Create(recipe.CourseTypes, id);
-        _cuisineDao.Create(recipe.CuisineTypes, id);
-        _tagDao.Create(recipe.Tags, id);
+        int id = await _recipeDao.CreateAsync(recipe);
+        await _courseDao.CreateAsync(recipe.CourseTypes, id);
+        await _cuisineDao.CreateAsync(recipe.CuisineTypes, id);
+        await _tagDao.CreateAsync(recipe.Tags, id);
         return id;
     }
 
-    public void Update(int id, RecipeRequest recipe)
+    public async Task UpdateAsync(int id, RecipeRequest recipe)
     {
-        _recipeDao.Update(id, recipe);
-        _courseDao.Delete(id);
-        _courseDao.Create(recipe.CourseTypes, id);
-        _cuisineDao.Delete(id);
-        _cuisineDao.Create(recipe.CuisineTypes, id);
-        _tagDao.Delete(id);
-        _tagDao.Create(recipe.Tags, id);
+        await _recipeDao.UpdateAsync(id, recipe);
+        await _courseDao.DeleteAsync(id);
+        await _courseDao.CreateAsync(recipe.CourseTypes, id);
+        await _cuisineDao.DeleteAsync(id);
+        await _cuisineDao.CreateAsync(recipe.CuisineTypes, id);
+        await _tagDao.DeleteAsync(id);
+        await _tagDao.CreateAsync(recipe.Tags, id);
     }
 
-    public bool Exists(int id) => _recipeDao.Exists(id);
+    public Task<bool> ExistsAsync(int id) => _recipeDao.ExistsAsync(id);
 
-    public void Delete(int id) => _recipeDao.Delete(id);
+    public Task DeleteAsync(int id) => _recipeDao.DeleteAsync(id);
 }

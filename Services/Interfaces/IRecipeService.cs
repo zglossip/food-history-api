@@ -5,17 +5,17 @@ namespace recipe_catalog_api.Services.Interfaces;
 
 public interface IRecipeService
 {
-    public Recipe? Get(int id);
+    public Task<Recipe?> GetAsync(int id);
 
-    public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name);
+    public Task<List<Recipe>> GetAsync(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name);
 
-    public int Create(RecipeRequest recipe);
+    public Task<int> CreateAsync(RecipeRequest recipe);
 
-    public int CreateFull(FullRecipeRequest recipe);
+    public Task<int> CreateFullAsync(FullRecipeRequest recipe);
 
-    public void Update(int id, RecipeRequest recipe);
+    public Task UpdateAsync(int id, RecipeRequest recipe);
 
-    public bool Exists(int id);
+    public Task<bool> ExistsAsync(int id);
 
-    public void Delete(int id);
+    public Task DeleteAsync(int id);
 }

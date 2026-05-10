@@ -15,9 +15,9 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     private readonly IRecipeService _recipeService = recipeService;
 
     [HttpGet("{id}")]
-    public ActionResult<Recipe> Get(int id)
+    public async Task<ActionResult<Recipe>> Get(int id)
     {
-        Recipe? recipe = _recipeService.Get(id);
+        Recipe? recipe = await _recipeService.GetAsync(id);
 
         if (recipe == null)
         {
@@ -28,7 +28,7 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     }
 
     [HttpGet]
-    public ActionResult<List<Recipe>> Get([FromQuery(Name = "course")] List<string> courses, [FromQuery(Name = "cuisine")] List<string> cuisines, [FromQuery(Name = "tag")] List<string> tags, [FromQuery(Name = "sort")] string? sort, [FromQuery(Name = "reverse")] bool? reverse, [FromQuery(Name = "name")] string? name)
+    public async Task<ActionResult<List<Recipe>>> Get([FromQuery(Name = "course")] List<string> courses, [FromQuery(Name = "cuisine")] List<string> cuisines, [FromQuery(Name = "tag")] List<string> tags, [FromQuery(Name = "sort")] string? sort, [FromQuery(Name = "reverse")] bool? reverse, [FromQuery(Name = "name")] string? name)
     {
         RecipeColumn? sortColumn = null;
 
@@ -41,47 +41,46 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
             sortColumn = RecipeColumn.NAME;
         }
 
-        List<Recipe> recipes = _recipeService.Get(courses, cuisines, tags, sortColumn, reverse, name);
+        List<Recipe> recipes = await _recipeService.GetAsync(courses, cuisines, tags, sortColumn, reverse, name);
 
         return recipes;
     }
 
     [HttpPost]
-    public IActionResult CreateFull(FullRecipeRequest recipe)
+    public async Task<IActionResult> CreateFull(FullRecipeRequest recipe)
     {
-        int id = _recipeService.CreateFull(recipe);
+        int id = await _recipeService.CreateFullAsync(recipe);
         return StatusCode(201, new { id });
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, RecipeRequest recipe)
+    public async Task<IActionResult> Update(int id, RecipeRequest recipe)
     {
-        if (!_recipeService.Exists(id))
+        if (!await _recipeService.ExistsAsync(id))
         {
             return NotFound();
         }
 
-        _recipeService.Update(id, recipe);
+        await _recipeService.UpdateAsync(id, recipe);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        if (!_recipeService.Exists(id))
+        if (!await _recipeService.ExistsAsync(id))
         {
             return NotFound();
         }
 
-        _recipeService.Delete(id);
+        await _recipeService.DeleteAsync(id);
         return NoContent();
     }
 
     [HttpGet("{id}/ingredients")]
-    public ActionResult<IngredientList> GetIngredients(int id)
+    public async Task<ActionResult<IngredientList>> GetIngredients(int id)
     {
-
-        IngredientList ingredientList = _ingredientService.Get(id);
+        IngredientList ingredientList = await _ingredientService.GetAsync(id);
 
         if (ingredientList == null)
         {
@@ -89,26 +88,25 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
         }
 
         return ingredientList;
-
     }
 
     [HttpPut("{id}/ingredients")]
-    public IActionResult UpdateIngredients(int id, IngredientList ingredientList)
+    public async Task<IActionResult> UpdateIngredients(int id, IngredientList ingredientList)
     {
-        if (!_recipeService.Exists(id))
+        if (!await _recipeService.ExistsAsync(id))
         {
             return NotFound();
         }
 
         ingredientList.RecipeId = id;
-        _ingredientService.Update(ingredientList);
+        await _ingredientService.UpdateAsync(ingredientList);
         return NoContent();
     }
 
     [HttpGet("{id}/instructions")]
-    public ActionResult<InstructionList> GetInstructions(int id)
+    public async Task<ActionResult<InstructionList>> GetInstructions(int id)
     {
-        InstructionList instructionList = _instructionService.Get(id);
+        InstructionList instructionList = await _instructionService.GetAsync(id);
 
         if (instructionList == null)
         {
@@ -119,15 +117,15 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     }
 
     [HttpPut("{id}/instructions")]
-    public IActionResult UpdateInstructions(int id, InstructionList instructionList)
+    public async Task<IActionResult> UpdateInstructions(int id, InstructionList instructionList)
     {
-        if (!_recipeService.Exists(id))
+        if (!await _recipeService.ExistsAsync(id))
         {
             return NotFound();
         }
 
         instructionList.RecipeId = id;
-        _instructionService.Update(instructionList);
+        await _instructionService.UpdateAsync(instructionList);
         return NoContent();
     }
 }

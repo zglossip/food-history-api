@@ -2,9 +2,9 @@ namespace recipe_catalog_api.DAOs.Interfaces;
 
 public interface ICourseDao
 {
-    public List<string> Get(int recipeId);
+    public Task<List<string>> GetAsync(int recipeId);
 
-    public void Delete(int recipeId);
+    public Task DeleteAsync(int recipeId);
 
-    public void Create(List<string> courses, int recipeId);
+    public Task CreateAsync(List<string> courses, int recipeId);
 }

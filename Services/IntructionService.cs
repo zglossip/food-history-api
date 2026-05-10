@@ -8,11 +8,12 @@ public class InstructionService(IInstructionDao instructionDao) : IInstructionSe
 {
     private readonly IInstructionDao _instructionDao = instructionDao;
 
-    public InstructionList Get(int recipeId) => new InstructionList(recipeId, _instructionDao.Get(recipeId));
+    public async Task<InstructionList> GetAsync(int recipeId) =>
+        new InstructionList(recipeId, await _instructionDao.GetAsync(recipeId));
 
-    public void Update(InstructionList instructionList)
+    public async Task UpdateAsync(InstructionList instructionList)
     {
-        _instructionDao.Delete(instructionList.RecipeId);
-        _instructionDao.Create(instructionList.Instructions, instructionList.RecipeId);
+        await _instructionDao.DeleteAsync(instructionList.RecipeId);
+        await _instructionDao.CreateAsync(instructionList.Instructions, instructionList.RecipeId);
     }
 }

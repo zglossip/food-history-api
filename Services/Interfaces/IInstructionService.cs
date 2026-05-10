@@ -4,7 +4,7 @@ namespace recipe_catalog_api.Services.Interfaces;
 
 public interface IInstructionService
 {
-    public InstructionList Get(int recipeId);
+    public Task<InstructionList> GetAsync(int recipeId);
 
-    public void Update(InstructionList instructionList);
+    public Task UpdateAsync(InstructionList instructionList);
 }

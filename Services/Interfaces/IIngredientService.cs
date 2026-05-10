@@ -4,7 +4,7 @@ using recipe_catalog_api.Models;
 
 public interface IIngredientService
 {
-    public IngredientList Get(int recipeId);
+    public Task<IngredientList> GetAsync(int recipeId);
 
-    public void Update(IngredientList ingredientList);
+    public Task UpdateAsync(IngredientList ingredientList);
 }

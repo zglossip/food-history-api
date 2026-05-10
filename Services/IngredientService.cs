@@ -8,11 +8,12 @@ public class IngredientService(IIngredientDao ingredientDao) : IIngredientServic
 {
     private readonly IIngredientDao _ingredientDao = ingredientDao;
 
-    public IngredientList Get(int recipeId) => new IngredientList(recipeId, _ingredientDao.Get(recipeId));
+    public async Task<IngredientList> GetAsync(int recipeId) =>
+        new IngredientList(recipeId, await _ingredientDao.GetAsync(recipeId));
 
-    public void Update(IngredientList ingredientList)
+    public async Task UpdateAsync(IngredientList ingredientList)
     {
-        _ingredientDao.Delete(ingredientList.RecipeId);
-        _ingredientDao.Create(ingredientList.Ingredients, ingredientList.RecipeId);
+        await _ingredientDao.DeleteAsync(ingredientList.RecipeId);
+        await _ingredientDao.CreateAsync(ingredientList.Ingredients, ingredientList.RecipeId);
     }
 }
