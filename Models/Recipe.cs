@@ -20,7 +20,7 @@ public class Recipe
 
     public DateTime? Uploaded { get; set; }
 
-    public Recipe(int Id, string Name, int ServingAmount, string ServingName, string? Source, DateTime Uploaded)
+    public Recipe(int Id, string Name, int ServingAmount, string ServingName, string? Source, DateTime? Uploaded)
     {
         this.Id = Id;
         this.Name = Name;
@@ -33,21 +33,13 @@ public class Recipe
         this.Uploaded = Uploaded;
     }
 
-    public Recipe(Recipe recipe)
-    {
-        Id = recipe.Id;
-        Name = recipe.Name;
-        CourseTypes = recipe.CourseTypes;
-        CuisineTypes = recipe.CuisineTypes;
-        Tags = recipe.Tags;
-        ServingAmount = recipe.ServingAmount;
-        ServingName = recipe.ServingName;
-        Source = recipe.Source;
-        Uploaded = recipe.Uploaded;
-    }
-
     public Recipe Clone()
     {
-        return new Recipe(this);
+        return new Recipe(this.Id, this.Name, this.ServingAmount, this.ServingName, this.Source, this.Uploaded)
+        {
+            CourseTypes = [.. this.CourseTypes],
+            CuisineTypes = [.. this.CuisineTypes],
+            Tags = [.. this.Tags]
+        };
     }
 }
