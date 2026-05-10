@@ -78,7 +78,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
         return DaoUtil.QueryForList(_databaseConnectionSupplier.GetConnectionString(), sql, new RecipeMapper(), parameters);
     }
 
-    public int Create(Recipe recipe)
+    public int Create(RecipeRequest recipe)
     {
         string sql = " INSERT INTO recipe_catalog.recipe" +
                      " (name, serving_amount, serving_name, source)" +
@@ -97,7 +97,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
         return DaoUtil.Create(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);
     }
 
-    public void Update(Recipe recipe)
+    public void Update(int id, RecipeRequest recipe)
     {
         string sql = " UPDATE recipe_catalog.recipe" +
                      " SET name = @name, serving_amount = @servingAmount, serving_name = @servingName, source = @source" +
@@ -109,7 +109,7 @@ public class RecipeDao(IDatabaseConnectionSupplier databaseConnectionSupplier) :
             new NpgsqlParameter("@servingAmount", recipe.ServingAmount),
             new NpgsqlParameter("@servingName", recipe.ServingName),
             new NpgsqlParameter("@source", recipe.Source == null ? DBNull.Value : recipe.Source),
-            new NpgsqlParameter("@recipeId", recipe.Id)
+            new NpgsqlParameter("@recipeId", id)
         };
 
         DaoUtil.Execute(_databaseConnectionSupplier.GetConnectionString(), sql, parameters);

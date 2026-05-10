@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using recipe_catalog_api.Models;
 using recipe_catalog_api.Models.Enums;
 
@@ -10,9 +9,9 @@ public interface IRecipeDao
 
     public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, string? name);
 
-    public int Create(Recipe recipe);
+    public int Create(RecipeRequest recipe);
 
-    public void Update(Recipe recipe);
+    public void Update(int id, RecipeRequest recipe);
 
     public void Delete(int id);
 }

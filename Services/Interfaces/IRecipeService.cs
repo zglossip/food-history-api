@@ -9,9 +9,9 @@ public interface IRecipeService
 
     public List<Recipe> Get(List<string> courses, List<string> cuisines, List<string> tags, RecipeColumn? sortColumn, bool? reverse, string? name);
 
-    public int Create(Recipe recipe);
+    public int Create(RecipeRequest recipe);
 
-    public void Update(Recipe recipe);
+    public void Update(int id, RecipeRequest recipe);
 
     public void Delete(int id);
 }

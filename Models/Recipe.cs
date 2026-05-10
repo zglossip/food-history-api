@@ -2,7 +2,7 @@ namespace recipe_catalog_api.Models;
 
 public class Recipe
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     public string Name { get; set; }
 
@@ -19,17 +19,6 @@ public class Recipe
     public string? Source { get; set; }
 
     public DateTime? Uploaded { get; set; }
-
-    //Only for use by deserialization
-    public Recipe()
-    {
-        this.Name = "ERROR";
-        this.CourseTypes = new List<string>();
-        this.CuisineTypes = new List<string>();
-        this.Tags = new List<string>();
-        this.ServingAmount = -1;
-        this.ServingName = "ERROR";
-    }
 
     public Recipe(int Id, string Name, int ServingAmount, string ServingName, string? Source, DateTime Uploaded)
     {

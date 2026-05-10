@@ -36,18 +36,18 @@ public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineD
 
     private Recipe _getPopulatedRecipe(Recipe? recipe)
     {
-        if (recipe == null || recipe.Id == null)
+        if (recipe == null)
         {
             throw new Exception("Cannot populate null recipe.");
         }
         Recipe newRecipe = recipe.Clone();
-        newRecipe.CourseTypes = _courseDao.Get((int)recipe.Id);
-        newRecipe.CuisineTypes = _cuisineDao.Get((int)recipe.Id);
-        newRecipe.Tags = _tagDao.Get((int)recipe.Id);
+        newRecipe.CourseTypes = _courseDao.Get(recipe.Id);
+        newRecipe.CuisineTypes = _cuisineDao.Get(recipe.Id);
+        newRecipe.Tags = _tagDao.Get(recipe.Id);
         return newRecipe;
     }
 
-    public int Create(Recipe recipe)
+    public int Create(RecipeRequest recipe)
     {
         int id = _recipeDao.Create(recipe);
         _courseDao.Create(recipe.CourseTypes, id);
@@ -56,19 +56,15 @@ public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineD
         return id;
     }
 
-    public void Update(Recipe recipe)
+    public void Update(int id, RecipeRequest recipe)
     {
-        if (recipe == null || recipe.Id == null)
-        {
-            throw new Exception("Cannot populate null recipe.");
-        }
-        _recipeDao.Update(recipe);
-        _courseDao.Delete((int)recipe.Id);
-        _courseDao.Create(recipe.CourseTypes, (int)recipe.Id);
-        _cuisineDao.Delete((int)recipe.Id);
-        _cuisineDao.Create(recipe.CuisineTypes, (int)recipe.Id);
-        _tagDao.Delete((int)recipe.Id);
-        _tagDao.Create(recipe.Tags, (int)recipe.Id);
+        _recipeDao.Update(id, recipe);
+        _courseDao.Delete(id);
+        _courseDao.Create(recipe.CourseTypes, id);
+        _cuisineDao.Delete(id);
+        _cuisineDao.Create(recipe.CuisineTypes, id);
+        _tagDao.Delete(id);
+        _tagDao.Create(recipe.Tags, id);
     }
 
     public void Delete(int id) => _recipeDao.Delete(id);

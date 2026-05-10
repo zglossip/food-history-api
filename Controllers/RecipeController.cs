@@ -47,24 +47,21 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     }
 
     [HttpPost]
-    public IActionResult Create(Recipe recipe)
+    public IActionResult Create(RecipeRequest recipe)
     {
         int id = _recipeService.Create(recipe);
-        recipe.Id = id;
-
-        return CreatedAtAction(nameof(Get), new { id = id }, recipe);
+        return StatusCode(201, new { id });
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Recipe recipe)
+    public IActionResult Update(int id, RecipeRequest recipe)
     {
         if (_recipeService.Get(id) == null)
         {
             return NotFound();
         }
 
-        recipe.Id = id;
-        _recipeService.Update(recipe);
+        _recipeService.Update(id, recipe);
         return NoContent();
     }
 
