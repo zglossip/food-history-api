@@ -9,7 +9,7 @@ CREATE TABLE recipe_catalog.ingredient
     PRIMARY KEY (recipe_id, name),
     CONSTRAINT "recipe_FK" FOREIGN KEY (recipe_id)
         REFERENCES recipe_catalog.recipe (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
         NOT VALID
 );
