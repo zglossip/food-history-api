@@ -23,16 +23,17 @@ public class RecipeService(IRecipeDao recipeDao, ICourseDao courseDao, ICuisineD
         List<Recipe> result = new List<Recipe>(recipes.Count);
         foreach (Recipe recipe in recipes)
         {
-            result.Add(await _getPopulatedRecipeAsync(recipe));
+            Recipe? newRecipe = await _getPopulatedRecipeAsync(recipe);
+            if (newRecipe != null) result.Add(newRecipe);
         }
         return result;
     }
 
-    private async Task<Recipe> _getPopulatedRecipeAsync(Recipe? recipe)
+    private async Task<Recipe?> _getPopulatedRecipeAsync(Recipe? recipe)
     {
         if (recipe == null)
         {
-            throw new Exception("Cannot populate null recipe.");
+            return null;
         }
         Recipe newRecipe = recipe.Clone();
         newRecipe.CourseTypes = await _courseDao.GetAsync(recipe.Id);

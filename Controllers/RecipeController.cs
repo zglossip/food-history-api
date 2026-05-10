@@ -82,11 +82,6 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     {
         IngredientList ingredientList = await _ingredientService.GetAsync(id);
 
-        if (ingredientList == null)
-        {
-            return NotFound();
-        }
-
         return ingredientList;
     }
 
@@ -107,11 +102,6 @@ public class RecipeController(IIngredientService ingredientService, IInstruction
     public async Task<ActionResult<InstructionList>> GetInstructions(int id)
     {
         InstructionList instructionList = await _instructionService.GetAsync(id);
-
-        if (instructionList == null)
-        {
-            return NotFound();
-        }
 
         return instructionList;
     }
